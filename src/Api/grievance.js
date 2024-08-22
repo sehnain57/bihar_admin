@@ -39,14 +39,12 @@ export const createGrievance = async (data) => {
 };
 
 
-
-export const GrievancesGet = async (page = 1, limit = 10, query = '') => {
+export const GrievancesGet = async (page = 1, limit = 10) => {
     try {
-        const response = await axios.get(`${baseUrl}/api/grievances/v1/grievances`, {
+        const response = await axios.get(`${baseUrl}/api/grievances/v1/admin/grievances`, {
             params: {
                 page,
                 limit,
-                query
             },
             headers: {
                 'accept': 'application/json',

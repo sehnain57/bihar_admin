@@ -60,14 +60,14 @@ const navConfig = [
     // path: '/dashboard/Users',
     icon: getIcon('heroicons:users'),
     children: [
-      {
-        title: 'Add User',
-        path: '/dashboard/Users/add',
-      },
-      {
-        title: 'Remove User',
-        path: '/dashboard/Users/remove',
-      },
+      // {
+      //   title: 'Add User',
+      //   path: '/dashboard/Users/add',
+      // },
+      // {
+      //   title: 'Remove User',
+      //   path: '/dashboard/Users/remove',
+      // },
       {
         title: 'User List',
         path: '/dashboard/Users/list',

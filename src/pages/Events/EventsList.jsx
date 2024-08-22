@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types'; // Add PropTypes import
+import PropTypes from 'prop-types';
 import { styled } from '@mui/system';
 import {
   Box,
   Button,
+  CircularProgress, // Import CircularProgress
   Pagination,
   TableSortLabel,
   Tooltip,
@@ -14,7 +15,7 @@ import {
   TableCell,
   TableHead,
   Table,
-  Select, 
+  Select,
   MenuItem
 } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
@@ -125,11 +126,14 @@ function TableCustomized() {
   const [orderBy, setOrderBy] = useState('epicNo');
   const [rows, setRows] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   const getData = async (page = 1) => {
+    setLoading(true); // Start loading
     await getEvents(page).then((res) => {
       setTotalItems(res.data.pagination.totalItems);
       setRows(res.data.data);
+      setLoading(false); // Stop loading
     });
   };
 
@@ -163,103 +167,109 @@ function TableCustomized() {
 
   return (
     <Box>
-      <Root>
-        <Table aria-label="custom pagination table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Tooltip title="Sort by EPIC No." arrow>
-                  <TableSortLabel
-                    active={orderBy === 'epicNo'}
-                    direction={orderBy === 'epicNo' ? order : 'asc'}
-                    onClick={(event) => handleRequestSort(event, 'epicNo')}
-                    IconComponent={() => <IconComponents order={orderBy === 'epicNo' ? order : 'asc'} />}
-                  >
-                    Token ID
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-              {/* Other TableCells */}
-            </TableRow>
-          </TableHead>
-          <tbody>
-            {rows.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>{row.epicId}</TableCell>
-                <TableCell>{`${row.date.slice(0, 10)} ${row.date.slice(11, 16)}`}</TableCell>
-                <TableCell>{row.mobileNumber}</TableCell>
-                <TableCell>{row?.constituency || "constituency not found"}</TableCell>
-                <TableCell>{row.boothNumber}</TableCell>
+      {loading ? ( // Conditionally render loading indicator
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Root>
+          <Table aria-label="custom pagination table">
+            <TableHead>
+              <TableRow>
                 <TableCell>
-                  <Select
-                    value={row.karyakartha || ''}
-                    onChange={(e) => handleKaryakarthaChange(row.id, e.target.value)}
-                    displayEmpty
-                    fullWidth
-                  >
-                    <MenuItem value="" disabled>
-                      Select Karyakartha
-                    </MenuItem>
-                    <MenuItem value="karyakartha1">Karyakartha 1</MenuItem>
-                    <MenuItem value="karyakartha2">Karyakartha 2</MenuItem>
-                    <MenuItem value="karyakartha3">Karyakartha 3</MenuItem>
-                    {/* Add more options as needed */}
-                  </Select>
-                </TableCell>
-                <TableCell>
-                  <LightTooltip
-                    placement='bottom-end'
-                    title={
-                      <Box>
-                        <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                          <Typography sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}>
-                            View Details
-                          </Typography>
-                        </Box>
-                        <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                          <Typography
-                            sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#FF0000" }}
-                            onClick={() => removeEvent(row.id)}
-                          >
-                            Remove
-                          </Typography>
-                        </Box>
-                      </Box>
-                    }
-                  >
-                    <Button
-                      sx={{
-                        color: "#3E4954",
-                        textTransform: "none",
-                        borderRadius: "8px",
-                        height: "37px",
-                        p: 1,
-                        "&:hover": {
-                          backgroundColor: "rgba(242, 244, 248, 0.25)",
-                          borderColor: "#2F4CDD",
-                        }
-                      }}
+                  <Tooltip title="Sort by EPIC No." arrow>
+                    <TableSortLabel
+                      active={orderBy === 'epicNo'}
+                      direction={orderBy === 'epicNo' ? order : 'asc'}
+                      onClick={(event) => handleRequestSort(event, 'epicNo')}
+                      IconComponent={() => <IconComponents order={orderBy === 'epicNo' ? order : 'asc'} />}
                     >
-                      <MoreHorizIcon />
-                    </Button>
-                  </LightTooltip>
+                      Token ID
+                    </TableSortLabel>
+                  </Tooltip>
+                </TableCell>
+                {/* Other TableCells */}
+              </TableRow>
+            </TableHead>
+            <tbody>
+              {rows.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.epicId}</TableCell>
+                  <TableCell>{`${row.date.slice(0, 10)} ${row.date.slice(11, 16)}`}</TableCell>
+                  <TableCell>{row.mobileNumber}</TableCell>
+                  <TableCell>{row?.constituency || "constituency not found"}</TableCell>
+                  <TableCell>{row.boothNumber}</TableCell>
+                  <TableCell>
+                    <Select
+                      value={row.karyakartha || ''}
+                      onChange={(e) => handleKaryakarthaChange(row.id, e.target.value)}
+                      displayEmpty
+                      fullWidth
+                    >
+                      <MenuItem value="" disabled>
+                        Select Karyakartha
+                      </MenuItem>
+                      <MenuItem value="karyakartha1">Karyakartha 1</MenuItem>
+                      <MenuItem value="karyakartha2">Karyakartha 2</MenuItem>
+                      <MenuItem value="karyakartha3">Karyakartha 3</MenuItem>
+                      {/* Add more options as needed */}
+                    </Select>
+                  </TableCell>
+                  <TableCell>
+                    <LightTooltip
+                      placement='bottom-end'
+                      title={
+                        <Box>
+                          <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
+                            <Typography sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}>
+                              View Details
+                            </Typography>
+                          </Box>
+                          <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
+                            <Typography
+                              sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#FF0000" }}
+                              onClick={() => removeEvent(row.id)}
+                            >
+                              Remove
+                            </Typography>
+                          </Box>
+                        </Box>
+                      }
+                    >
+                      <Button
+                        sx={{
+                          color: "#3E4954",
+                          textTransform: "none",
+                          borderRadius: "8px",
+                          height: "37px",
+                          p: 1,
+                          "&:hover": {
+                            backgroundColor: "rgba(242, 244, 248, 0.25)",
+                            borderColor: "#2F4CDD",
+                          }
+                        }}
+                      >
+                        <MoreHorizIcon />
+                      </Button>
+                    </LightTooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+            <tfoot>
+              <TableRow>
+                <TableCell colSpan={7}>
+                  <CustomTablePagination
+                    count={Math.ceil(totalItems / rowsPerPage)}
+                    page={page}
+                    onPageChange={handleChangePage}
+                  />
                 </TableCell>
               </TableRow>
-            ))}
-          </tbody>
-          <tfoot>
-            <TableRow>
-              <TableCell colSpan={7}>
-                <CustomTablePagination
-                  count={Math.ceil(totalItems / rowsPerPage)}
-                  page={page}
-                  onPageChange={handleChangePage}
-                />
-              </TableCell>
-            </TableRow>
-          </tfoot>
-        </Table>
-      </Root>
+            </tfoot>
+          </Table>
+        </Root>
+      )}
       <Box>
         <EventDetail />
       </Box>

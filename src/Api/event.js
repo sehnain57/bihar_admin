@@ -107,6 +107,7 @@ export const deleteEvent = async (id) => {
             }
         );
         console.log('Event deleted successfully', response.data);
+        Swal.fire("deleted", "Event deleted successfully", "deleted")
         return response.data;
     } catch (err) {
         console.error('Error deleting event:', err);
