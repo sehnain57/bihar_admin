@@ -6,9 +6,9 @@ import { createBooth, getAllBooths } from '../../Api/booth'; // Adjust the impor
 function AddBooth() {
   const [formData, setFormData] = useState({
     name: '',
-    constituency: '',
+    constituencyId: '', // Changed from constituency to constituencyId
   });
-  
+
   const [constituencies, setConstituencies] = useState([]);
 
   // Fetch booth data on component mount
@@ -17,9 +17,9 @@ function AddBooth() {
       try {
         const response = await getAllBooths();
         const data = response.data || [];
-        
-        // Extract unique constituency values
-        const uniqueConstituencies = [...new Set(data.map(booth => booth.constituency).filter(Boolean))];
+
+        // Extract unique constituencies with IDs and names
+        const uniqueConstituencies = [...new Map(data.map(booth => [booth.constituency.id, booth.constituency])).values()];
         setConstituencies(uniqueConstituencies);
       } catch (err) {
         console.error('Error fetching booths:', err);
@@ -37,12 +37,12 @@ function AddBooth() {
     try {
       const payload = {
         name: formData.name,
-        constituency: formData.constituency,
+        constituencyId: formData.constituencyId, // Sending constituencyId instead of name
       };
-      
+
       await createBooth(payload);
       Swal.fire("Success", "Booth added successfully", "success");
-      setFormData({ name: '', constituency: '' }); // Clear the form fields after submission
+      setFormData({ name: '', constituencyId: '' }); // Clear the form fields after submission
     } catch (err) {
       console.error('Error adding booth:', err);
       Swal.fire("Error", "Failed to add booth", "error");
@@ -68,8 +68,8 @@ function AddBooth() {
         {/* Dropdown for Constituency */}
         <Select
           label="Constituency"
-          name="constituency"
-          value={formData.constituency}
+          name="constituencyId" // Changed from constituency to constituencyId
+          value={formData.constituencyId}
           onChange={handleChange}
           variant="outlined"
           fullWidth
@@ -79,9 +79,9 @@ function AddBooth() {
           <MenuItem value="">
             <em>Select Constituency</em>
           </MenuItem>
-          {constituencies.map((constituency, index) => (
-            <MenuItem key={index} value={constituency}>
-              {constituency}
+          {constituencies.map((constituency) => (
+            <MenuItem key={constituency.id} value={constituency.id}>
+              {constituency.name}
             </MenuItem>
           ))}
         </Select>

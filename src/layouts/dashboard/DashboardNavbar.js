@@ -249,24 +249,41 @@ style={{
 </Box>
       {/* User Greeting and Avatar */}
       <Button
-        variant="contained"
-        sx={{
-          backgroundColor: '#2F4CDD',
-          color: 'white',
-          borderRadius: 3,
-          paddingRight: 2,
-          textTransform: 'none',
-          fontWeight: 'bold',
-          '&:hover': {
-            backgroundColor: '#3C4469',
-          },
-        }}
-        endIcon={
-          <Avatar sx={{ width: 24, height: 24,   }} />
-        }
-      >
-        Hello, Sairam
-      </Button>
+  variant="contained"
+  sx={{
+    backgroundColor: '#2F4CDD',
+    color: 'white',
+    borderRadius: '12px 32px 32px 12px', // Keep the initial curve
+    paddingRight: 4, // Increase padding to make space for the avatar
+    paddingLeft: 2,
+    textTransform: 'none',
+    fontWeight: 'bold',
+    position: 'relative', // Positioning the avatar relative to the button
+    overflow: 'hidden', // Ensures the button retains its shape
+    '&:hover': {
+      backgroundColor: '#3C4469',
+    },
+  }}
+  endIcon={
+    <Avatar
+      sx={{
+        width: 36, // Adjusted size to fit well within the button
+        height: 36,
+        position: 'absolute', // Absolute positioning to place it in the curve
+        right: -2, // Adjusted to center the avatar in the curve
+        top: '50%',
+        transform: 'translateY(-50%)', // Centering the avatar vertically
+        borderRadius: '50%',
+        backgroundColor: 'white', // White background for the avatar
+        boxShadow: '0 0 0 2px #2F4CDD', // Optional: adds a border around the avatar to match the button color
+      }}
+    />
+  }
+>
+  Hello, Sairam
+</Button>
+
+
     </Box>
     
 

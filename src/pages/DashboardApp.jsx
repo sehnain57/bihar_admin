@@ -282,7 +282,7 @@ function DashboardApp ()  {
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <Card sx={{ display: "flex", padding: "10px", justifyContent: "space-between", alignItems: "center", paddingBottom: "20px" }}>
-            <Box sx={{ borderRadius: "50%", padding: "10px", backgroundColor: "#DEE4FF", width: "100%" }}>
+            <Box sx={{ borderRadius: "50%", padding: "10px", backgroundColor: "#DEE4FF" }}>
               <img src={cardImg1} alt="Card" />
             </Box>
 
@@ -327,7 +327,7 @@ function DashboardApp ()  {
                   </Typography>
                 </Box>
                 <Typography sx={{ color: "#2F4CDD" }}>
-                  Manage
+                  Manage &gt;
                 </Typography>
               </Box>
 
@@ -376,42 +376,25 @@ function DashboardApp ()  {
 
                 {/* Progress Bars */}
                 <Box sx={{ padding: "10px", flexGrow: 1 }}>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                    <Typography sx={{ fontSize: "14px" }}>
-                      Total Grievances
-                    </Typography>
-                    <Box sx={{ width: "50%", backgroundColor: "#E0E0E0", height: "7px", borderRadius: "10px", marginLeft: "10px", marginRight: "10px" }}>
-                      <Box sx={{ width: "70%", backgroundColor: "#000091", height: "100%", borderRadius: "10px" }} />
-                    </Box>
-                    <Typography sx={{ fontSize: "12px" }}>
-                      25
-                    </Typography>
-                  </Box>
+  {[
+    { label: "Total Grievances", value: 25, progress: 70, color: "#000091" },
+    { label: "Completed", value: 15, progress: 50, color: "#DA0003" },
+    { label: "Pending", value: 7, progress: 20, color: "#027402" },
+  ].map(({ label, value, progress, color }) => (
+    <Box key={label} sx={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+      <Typography sx={{ width: "30%", fontSize: "14px" }}>
+        {label}
+      </Typography>
+      <Box sx={{ width: "50%", backgroundColor: "#E0E0E0", height: "7px", borderRadius: "10px", mx: "10px" }}>
+        <Box sx={{ width: `${progress}%`, backgroundColor: color, height: "100%", borderRadius: "10px" }} />
+      </Box>
+      <Typography sx={{ fontSize: "12px" }}>
+        {value}
+      </Typography>
+    </Box>
+  ))}
+</Box>
 
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                    <Typography sx={{ width: "30%", fontSize: "14px" }}>
-                      Completed
-                    </Typography>
-                    <Box sx={{ width: "50%", backgroundColor: "#E0E0E0", height: "7px", borderRadius: "10px", marginLeft: "10px", marginRight: "10px" }}>
-                      <Box sx={{ width: "50%", backgroundColor: "#DA0003", height: "100%", borderRadius: "10px" }} />
-                    </Box>
-                    <Typography sx={{ fontSize: "12px" }}>
-                      15
-                    </Typography>
-                  </Box>
-
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <Typography sx={{ width: "30%", fontSize: "14px" }}>
-                      Pending
-                    </Typography>
-                    <Box sx={{ width: "50%", backgroundColor: "#E0E0E0", height: "7px", borderRadius: "10px", marginLeft: "10px", marginRight: "10px" }}>
-                      <Box sx={{ width: "20%", backgroundColor: "#027402", height: "100%", borderRadius: "10px" }} />
-                    </Box>
-                    <Typography sx={{ fontSize: "12px" }}>
-                      7
-                    </Typography>
-                  </Box>
-                </Box>
               </Box>
 
 
@@ -476,43 +459,26 @@ function DashboardApp ()  {
                 <Bar dataKey="pv" fill="#82ca9d" />
               </BarChart> */}
 
-              <Box sx={{ padding: "10px", flexGrow: 1 }}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                  <Typography sx={{ fontSize: "14px" }}>
-                    Total Grievances
-                  </Typography>
-                  <Box sx={{ width: "50%", backgroundColor: "#E0E0E0", height: "7px", borderRadius: "10px", marginLeft: "10px", marginRight: "10px" }}>
-                    <Box sx={{ width: "70%", backgroundColor: "#000091", height: "100%", borderRadius: "10px" }} />
-                  </Box>
-                  <Typography sx={{ fontSize: "12px" }}>
-                    25
-                  </Typography>
-                </Box>
+<Box sx={{ padding: "10px", flexGrow: 1 }}>
+  {[
+    { label: "Total Grievances", value: 25, progress: 70, color: "#000091" },
+    { label: "Completed", value: 15, progress: 50, color: "#DA0003" },
+    { label: "Pending", value: 7, progress: 20, color: "#027402" },
+  ].map(({ label, value, progress, color }) => (
+    <Box key={label} sx={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+      <Typography sx={{ width: "30%", fontSize: "14px" }}>
+        {label}
+      </Typography>
+      <Box sx={{ width: "50%", backgroundColor: "#E0E0E0", height: "7px", borderRadius: "10px", marginX: "10px" }}>
+        <Box sx={{ width: `${progress}%`, backgroundColor: color, height: "100%", borderRadius: "10px" }} />
+      </Box>
+      <Typography sx={{ fontSize: "12px" }}>
+        {value}
+      </Typography>
+    </Box>
+  ))}
+</Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                  <Typography sx={{ width: "30%", fontSize: "14px" }}>
-                    Completed
-                  </Typography>
-                  <Box sx={{ width: "50%", backgroundColor: "#E0E0E0", height: "7px", borderRadius: "10px", marginLeft: "10px", marginRight: "10px" }}>
-                    <Box sx={{ width: "50%", backgroundColor: "#DA0003", height: "100%", borderRadius: "10px" }} />
-                  </Box>
-                  <Typography sx={{ fontSize: "12px" }}>
-                    15
-                  </Typography>
-                </Box>
-
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <Typography sx={{ width: "30%", fontSize: "14px" }}>
-                    Pending
-                  </Typography>
-                  <Box sx={{ width: "50%", backgroundColor: "#E0E0E0", height: "7px", borderRadius: "10px", marginLeft: "10px", marginRight: "10px" }}>
-                    <Box sx={{ width: "20%", backgroundColor: "#027402", height: "100%", borderRadius: "10px" }} />
-                  </Box>
-                  <Typography sx={{ fontSize: "12px" }}>
-                    7
-                  </Typography>
-                </Box>
-              </Box>
             </CardContent>
           </Card>
 

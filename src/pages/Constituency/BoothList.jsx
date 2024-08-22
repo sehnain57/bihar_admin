@@ -14,6 +14,7 @@ import {
   TableCell,
   TableHead,
   Table,
+  CircularProgress
 } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
@@ -122,12 +123,20 @@ function TableCustomized() {
   const [orderBy, setOrderBy] = useState('name'); // Assuming you want to sort by name
   const [rows, setRows] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   const getData = async (page = 1) => {
-    await getBooths(page).then((res) => {
+    setLoading(true); // Set loading true when fetching data
+    try {
+      const res = await getBooths(page);
       setTotalItems(res.data.pagination.totalItems);
       setRows(res.data.data);
-    });
+    } catch (error) {
+      // Handle error if needed
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false); // Set loading false after data is fetched
+    }
   };
 
   useEffect(() => {
@@ -153,81 +162,87 @@ function TableCustomized() {
   return (
     <Box>
       <Root>
-        <Table aria-label="custom pagination table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Tooltip title="Sort by Name" arrow>
-                  <TableSortLabel
-                    active={orderBy === 'name'}
-                    direction={orderBy === 'name' ? order : 'asc'}
-                    onClick={(event) => handleRequestSort(event, 'name')}
-                    IconComponent={() => <IconComponents order={orderBy === 'name' ? order : 'asc'} />}
-                  >
-                    Name
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-              {/* Add more TableCells as needed */}
-            </TableRow>
-          </TableHead>
-          <tbody>
-            {rows.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>{row.name}</TableCell>
+        {loading ? (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Table aria-label="custom pagination table">
+            <TableHead>
+              <TableRow>
                 <TableCell>
-                  <LightTooltip
-                    placement='bottom-end'
-                    title={
-                      <Box>
-                        <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                          <Typography sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}>
-                            View Details
-                          </Typography>
-                        </Box>
-                        <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                          <Typography
-                            sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#FF0000" }}
-                            onClick={() => removeBooth(row.id)}
-                          >
-                            Remove
-                          </Typography>
-                        </Box>
-                      </Box>
-                    }
-                  >
-                    <Button
-                      sx={{
-                        color: "#3E4954",
-                        textTransform: "none",
-                        borderRadius: "8px",
-                        height: "37px",
-                        p: 1,
-                        "&:hover": {
-                          backgroundColor: "rgba(242, 244, 248, 0.25)",
-                          borderColor: "#2F4CDD",
-                        }
-                      }}
+                  <Tooltip title="Sort by Name" arrow>
+                    <TableSortLabel
+                      active={orderBy === 'name'}
+                      direction={orderBy === 'name' ? order : 'asc'}
+                      onClick={(event) => handleRequestSort(event, 'name')}
+                      IconComponent={() => <IconComponents order={orderBy === 'name' ? order : 'asc'} />}
                     >
-                      <MoreHorizIcon />
-                    </Button>
-                  </LightTooltip>
+                      Name
+                    </TableSortLabel>
+                  </Tooltip>
+                </TableCell>
+                {/* Add more TableCells as needed */}
+              </TableRow>
+            </TableHead>
+            <tbody>
+              {rows.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>
+                    <LightTooltip
+                      placement='bottom-end'
+                      title={
+                        <Box>
+                          <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
+                            <Typography sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}>
+                              View Details
+                            </Typography>
+                          </Box>
+                          <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
+                            <Typography
+                              sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#FF0000" }}
+                              onClick={() => removeBooth(row.id)}
+                            >
+                              Remove
+                            </Typography>
+                          </Box>
+                        </Box>
+                      }
+                    >
+                      <Button
+                        sx={{
+                          color: "#3E4954",
+                          textTransform: "none",
+                          borderRadius: "8px",
+                          height: "37px",
+                          p: 1,
+                          "&:hover": {
+                            backgroundColor: "rgba(242, 244, 248, 0.25)",
+                            borderColor: "#2F4CDD",
+                          }
+                        }}
+                      >
+                        <MoreHorizIcon />
+                      </Button>
+                    </LightTooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+            <tfoot>
+              <TableRow>
+                <TableCell colSpan={7}>
+                  <CustomTablePagination
+                    count={Math.ceil(totalItems / rowsPerPage)}
+                    page={page}
+                    onPageChange={handleChangePage}
+                  />
                 </TableCell>
               </TableRow>
-            ))}
-          </tbody>
-          <tfoot>
-            <TableRow>
-              <TableCell colSpan={7}>
-                <CustomTablePagination
-                  count={Math.ceil(totalItems / rowsPerPage)}
-                  page={page}
-                  onPageChange={handleChangePage}
-                />
-              </TableCell>
-            </TableRow>
-          </tfoot>
-        </Table>
+            </tfoot>
+          </Table>
+        )}
       </Root>
     </Box>
   );
