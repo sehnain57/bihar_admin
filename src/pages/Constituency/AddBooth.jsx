@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, TextField, Typography, Select, MenuItem } from '@mui/material';
 import Swal from 'sweetalert2';
-import { createBooth, getAllBooths } from '../../Api/booth'; // Adjust the import path according to your project structure
+import { createBooth } from '../../Api/booth'; // Adjust the import path according to your project structure
+import { getAllConstituencies } from '../../Api/constituencies';
 
 function AddBooth() {
   const [formData, setFormData] = useState({
     name: '',
-    constituencyId: '', // Changed from constituency to constituencyId
+    constituencyId: '',
   });
 
   const [constituencies, setConstituencies] = useState([]);
 
-  // Fetch booth data on component mount
+  // Fetch constituencies data on component mount
   useEffect(() => {
-    const fetchBooths = async () => {
+    const fetchConstituencies = async () => {
       try {
-        const response = await getAllBooths();
+        const response = await getAllConstituencies();
         const data = response.data || [];
 
-        // Extract unique constituencies with IDs and names
-        const uniqueConstituencies = [...new Map(data.map(booth => [booth.constituency.id, booth.constituency])).values()];
-        setConstituencies(uniqueConstituencies);
+        // Extract constituencies with IDs and names
+        setConstituencies(data);
       } catch (err) {
-        console.error('Error fetching booths:', err);
+        console.error('Error fetching constituencies:', err);
       }
     };
 
-    fetchBooths();
+    fetchConstituencies();
   }, []);
 
   const handleChange = (e) => {
@@ -37,7 +37,7 @@ function AddBooth() {
     try {
       const payload = {
         name: formData.name,
-        constituencyId: formData.constituencyId, // Sending constituencyId instead of name
+        constituencyId: formData.constituencyId,
       };
 
       await createBooth(payload);
@@ -68,7 +68,7 @@ function AddBooth() {
         {/* Dropdown for Constituency */}
         <Select
           label="Constituency"
-          name="constituencyId" // Changed from constituency to constituencyId
+          name="constituencyId"
           value={formData.constituencyId}
           onChange={handleChange}
           variant="outlined"

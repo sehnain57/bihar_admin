@@ -21,7 +21,19 @@ export const createConstituencies = async (name) => {
         throw err;
     }
 };
-
+export const getAllConstituencies = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/constituencies/v1/constituencies/all`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching all constituencies:', error);
+      throw error;
+    }
+  };
 export const getConstituencies = async (page = 1, limit = 10) => {
     try {
         const response = await axios.get(`${baseUrl}/api/constituencies/v1/constituencies`, {
