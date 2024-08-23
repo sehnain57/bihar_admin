@@ -1,7 +1,9 @@
 export const baseUrl = "https://biharb.leadgenadvertisements.com";
 
-// Manually set the token
 export const getToken = () => {
-  const manualToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEyJGlkd0dGb3ZpOEhUdy5TejB5d0RHcGVVNTdxeExvdGNFNlg5T2cwREtZWk8xVmdRbTMzc1VHIiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yMVQwNzoyMDo1My40NDZaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yMVQwNzoyMDo1My40NDZaIiwiaWF0IjoxNzI0MzI4NTg2LCJleHAiOjE3MjQzNzE3ODZ9.mL1sul10yVce9UoYslS0UooYi329LklRnm3dEM48_lU";
-  return manualToken;
+  // Retrieve the token from local storage
+  const storedToken = localStorage.getItem('token');
+  
+  // Return the token from local storage, or null if not found
+  return storedToken || null;
 };

@@ -35,6 +35,44 @@ export const registerUser = async (userData) => {
     }
 };
 
+export const loginAndSaveToken = async () => {
+    const email = 'admin@example.com';  // Fixed email value
+    const password = 'admin';           // Fixed password value
+
+    try {
+        const response = await axios.post(
+            `${baseUrl}/api/admin/v1/login`,
+            {
+                email,
+                password
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        if (response.data.success && response.data.data && response.data.data.token) {
+            // Save the token in local storage
+            localStorage.setItem('token', response.data.data.token);
+            return response.data.data.token;
+        } 
+        
+        Swal.fire("Error", response.data.message || "Login failed", "error");
+        throw new Error(response.data.message || "Login failed");
+
+    } catch (err) {
+        console.error('Login failed:', err.response ? err.response.data : err.message);
+        Swal.fire("Error", err.response ? err.response.data.message : err.message, "error");
+        throw err;
+    }
+};
+
+
+
+
 export const getUsers = async (query, page = 1, limit = 10) => {
     try {
         const response = await axios.get(`${baseUrl}/api/user/v1/users`, {

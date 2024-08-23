@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
@@ -6,6 +6,7 @@ import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormContr
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
+import { loginAndSaveToken } from '../../../Api/user';
 
 
 
@@ -18,7 +19,9 @@ export default function LoginForm() {
   //   phoneNum: Yup.string().matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits').required('Phone Number is required'),
   //   fcmToken: Yup.string().required('FCM-Token is required'),
   // });
-
+  useEffect(() => {
+    loginAndSaveToken();
+  }, []);
   const formik = useFormik({
     initialValues: {
       phoneNum: '',
