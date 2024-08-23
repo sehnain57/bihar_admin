@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, Typography, Paper } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import Swal from 'sweetalert2';
 
 import { createConstituencies } from '../../Api/constituencies'; // Adjust the import paths as per your project structure
@@ -32,7 +32,7 @@ const AddConstituencies = () => {
       </Typography>
 
       <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-        <Box sx={{ padding: '20px', border: '1px solid black', borderRadius: '8px', width: "50%" }}>
+        <Box sx={{ padding: '20px', border: '1px solid black', borderRadius: '8px', width: "50%",backgroundColor:'white', boxShadow:10 }}>
           <Typography variant="h6" gutterBottom>
             Enter Constituency Details
           </Typography>

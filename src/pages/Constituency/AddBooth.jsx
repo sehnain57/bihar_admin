@@ -50,11 +50,11 @@ function AddBooth() {
   };
 
   return (
-    <Box sx={{ maxWidth: '600px', margin: '0 auto', p: 2 }}>
+    <Box sx={{ maxWidth: '600px', margin: '0 auto', p: 2,backgroundColor:'white', borderRadius:2, boxShadow:10 }}>
       <Typography variant="h5" gutterBottom>
         Add Booth
       </Typography>
-      <Box component="form" noValidate autoComplete="off">
+      <Box component="form" noValidate autoComplete="off" >
         <TextField
           label="Booth Name"
           name="name"
@@ -63,6 +63,7 @@ function AddBooth() {
           variant="outlined"
           fullWidth
           margin="normal"
+          sx={{ paddingBottom: '14px' }}
         />
 
         {/* Dropdown for Constituency */}
@@ -75,6 +76,7 @@ function AddBooth() {
           fullWidth
           margin="normal"
           displayEmpty
+          sx={{ paddingBottom: '14px' }}
         >
           <MenuItem value="">
             <em>Select Constituency</em>

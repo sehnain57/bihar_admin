@@ -22,13 +22,6 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { getUsers, removeUser } from '../../Api/user';
 
-
-
-
-
-
-
-
 function CustomTablePagination({ count, page, onPageChange }) {
   return (
     <Box display="flex" justifyContent="center" alignItems="center" m={2}>
@@ -59,7 +52,6 @@ const LightTooltip = styled(({ className, ...props }) => (
 }));
 
 function UserList() {
-
   return (
     <div>
       <Box sx={{ p: 2 }}>
@@ -186,7 +178,7 @@ function TableCustomized() {
   return (
     <Box>
       <Root>
-        <Table aria-label="custom pagination table">
+        <Table aria-label="custom pagination table" sx={{ backgroundColor: "white" }}>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -201,7 +193,55 @@ function TableCustomized() {
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
-              {/* Other TableCells */}
+              <TableCell>
+                <Tooltip title="Sort by Full Name" arrow>
+                  <TableSortLabel
+                    active={orderBy === 'fullName'}
+                    direction={orderBy === 'fullName' ? order : 'asc'}
+                    onClick={(event) => handleRequestSort(event, 'fullName')}
+                    IconComponent={() => <IconComponents order={orderBy === 'fullName' ? order : 'asc'} />}
+                  >
+                    Full Name
+                  </TableSortLabel>
+                </Tooltip>
+              </TableCell>
+              <TableCell>
+                <Tooltip title="Sort by Mobile Number" arrow>
+                  <TableSortLabel
+                    active={orderBy === 'mobileNumber'}
+                    direction={orderBy === 'mobileNumber' ? order : 'asc'}
+                    onClick={(event) => handleRequestSort(event, 'mobileNumber')}
+                    IconComponent={() => <IconComponents order={orderBy === 'mobileNumber' ? order : 'asc'} />}
+                  >
+                    Mobile Number
+                  </TableSortLabel>
+                </Tooltip>
+              </TableCell>
+              <TableCell>
+                <Tooltip title="Sort by Legislative Constituency" arrow>
+                  <TableSortLabel
+                    active={orderBy === 'legislativeConstituency'}
+                    direction={orderBy === 'legislativeConstituency' ? order : 'asc'}
+                    onClick={(event) => handleRequestSort(event, 'legislativeConstituency')}
+                    IconComponent={() => <IconComponents order={orderBy === 'legislativeConstituency' ? order : 'asc'} />}
+                  >
+                    Legislative Constituency
+                  </TableSortLabel>
+                </Tooltip>
+              </TableCell>
+              <TableCell>
+                <Tooltip title="Sort by Booth Name/Number" arrow>
+                  <TableSortLabel
+                    active={orderBy === 'boothNameOrNumber'}
+                    direction={orderBy === 'boothNameOrNumber' ? order : 'asc'}
+                    onClick={(event) => handleRequestSort(event, 'boothNameOrNumber')}
+                    IconComponent={() => <IconComponents order={orderBy === 'boothNameOrNumber' ? order : 'asc'} />}
+                  >
+                    Booth Name/Number
+                  </TableSortLabel>
+                </Tooltip>
+              </TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <tbody>

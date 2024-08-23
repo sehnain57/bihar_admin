@@ -13,7 +13,9 @@ import {
   TableRow,
   TableCell,
   TableHead,
+  TableBody,
   Table,
+  TableFooter,
   CircularProgress
 } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
@@ -36,14 +38,12 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 function BoothList() {
   return (
-    <div>
-      <Box sx={{ p: 2 }}>
-        <Typography sx={{ fontWeight: "bold", fontSize: "20px", textDecoration: "underline" }}>
-          Booth List
-        </Typography>
-      </Box>
+    <Box sx={{ p: 2, backgroundColor: 'white', height: '100vh' }}>
+      <Typography sx={{ fontWeight: "bold", fontSize: "20px", textDecoration: "underline" }}>
+        Booth List
+      </Typography>
       <TableCustomized />
-    </div>
+    </Box>
   );
 }
 
@@ -160,14 +160,14 @@ function TableCustomized() {
   };
 
   return (
-    <Box>
+    <Box sx={{ backgroundColor: 'white' }}> {/* Set background color for Box */}
       <Root>
         {loading ? (
           <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
             <CircularProgress />
           </Box>
         ) : (
-          <Table aria-label="custom pagination table">
+          <Table aria-label="custom pagination table" sx={{ backgroundColor: 'white' }}> {/* Set table background color */}
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -182,13 +182,26 @@ function TableCustomized() {
                     </TableSortLabel>
                   </Tooltip>
                 </TableCell>
-                {/* Add more TableCells as needed */}
+                <TableCell>
+                  <Tooltip title="Sort by Constituency Name" arrow>
+                    <TableSortLabel
+                      active={orderBy === 'constituencyName'}
+                      direction={orderBy === 'constituencyName' ? order : 'asc'}
+                      onClick={(event) => handleRequestSort(event, 'constituencyName')}
+                      IconComponent={() => <IconComponents order={orderBy === 'constituencyName' ? order : 'asc'} />}
+                    >
+                      Constituency Name
+                    </TableSortLabel>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>Action</TableCell> {/* New heading for Action column */}
               </TableRow>
             </TableHead>
-            <tbody>
+            <TableBody> {/* Use TableBody for tbody */}
               {rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.constituency.name}</TableCell> {/* New cell for constituency name */}
                   <TableCell>
                     <LightTooltip
                       placement='bottom-end'
@@ -229,10 +242,10 @@ function TableCustomized() {
                   </TableCell>
                 </TableRow>
               ))}
-            </tbody>
-            <tfoot>
+            </TableBody>
+            <TableFooter>
               <TableRow>
-                <TableCell colSpan={7}>
+                <TableCell colSpan={3}> {/* Adjust colSpan to match the number of columns */}
                   <CustomTablePagination
                     count={Math.ceil(totalItems / rowsPerPage)}
                     page={page}
@@ -240,7 +253,7 @@ function TableCustomized() {
                   />
                 </TableCell>
               </TableRow>
-            </tfoot>
+            </TableFooter>
           </Table>
         )}
       </Root>
@@ -279,6 +292,7 @@ const CustomButton = styled(Button)({
 });
 
 const Root = styled('div')(({ theme }) => ({
+  backgroundColor: 'white', // Set background color for Root
   '& .MuiTableHead-root': {
     backgroundColor: theme.palette.background.default,
   },

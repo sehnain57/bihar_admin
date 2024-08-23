@@ -15,7 +15,12 @@ import {
   TableHead,
   Table,
   Select,
-  MenuItem
+  MenuItem,
+  TableBody,
+  TableFooter,
+  CircularProgress,
+  TableContainer,
+  Paper
 } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
@@ -37,14 +42,14 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 function EventRequest() {
   return (
-    <div>
+    <TableContainer component={Paper}>
       <Box sx={{ p: 2 }}>
         <Typography sx={{ fontWeight: "bold", fontSize: "20px", textDecoration: "underline" }}>
           Event Request
         </Typography>
       </Box>
       <TableCustomized />
-    </div>
+    </TableContainer>
   );
 }
 
@@ -124,12 +129,18 @@ function TableCustomized() {
   const [orderBy, setOrderBy] = useState('epicNo');
   const [rows, setRows] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const getData = async (page = 1) => {
-    await getEvents(page).then((res) => {
+    try {
+      const res = await getEvents(page);
       setTotalItems(res.data.pagination.totalItems);
       setRows(res.data.data);
-    });
+      setLoading(false);
+    } catch (e) {
+      console.error(e);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -159,8 +170,12 @@ function TableCustomized() {
 
   return (
     <Box>
-      <Root>
-        <Table aria-label="custom pagination table">
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Table aria-label="custom pagination table" sx={{ backgroundColor: "white" }}>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -175,10 +190,15 @@ function TableCustomized() {
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
-              {/* Other TableCells */}
+              <TableCell>Date</TableCell>
+              <TableCell>Mobile Number</TableCell>
+              <TableCell>Constituency</TableCell>
+              <TableCell>Booth Number</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <tbody>
+          <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>{row.epicId}</TableCell>
@@ -188,7 +208,7 @@ function TableCustomized() {
                 <TableCell>{row.boothNumber}</TableCell>
                 <TableCell>
                   <Select
-                    value={row.status || ''}
+                    value={row.status !== undefined ? String(row.status) : ''}
                     onChange={(e) => handleStatusChange(row.id, e.target.value)}
                     displayEmpty
                     fullWidth
@@ -242,8 +262,8 @@ function TableCustomized() {
                 </TableCell>
               </TableRow>
             ))}
-          </tbody>
-          <tfoot>
+          </TableBody>
+          <TableFooter>
             <TableRow>
               <TableCell colSpan={7}>
                 <CustomTablePagination
@@ -253,9 +273,9 @@ function TableCustomized() {
                 />
               </TableCell>
             </TableRow>
-          </tfoot>
+          </TableFooter>
         </Table>
-      </Root>
+      )}
     </Box>
   );
 }
@@ -290,14 +310,4 @@ const CustomButton = styled(Button)({
   },
 });
 
-const Root = styled('div')(({ theme }) => ({
-  '& .MuiTableHead-root': {
-    backgroundColor: theme.palette.background.default,
-  },
-  '& .MuiTableCell-root': {
-    borderBottom: `1px solid ${theme.palette.divider}`,
-  },
-  '& .MuiTableSortLabel-root': {
-    color: theme.palette.text.primary,
-  },
-}));
+

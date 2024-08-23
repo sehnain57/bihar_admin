@@ -13,6 +13,8 @@ import {
   TableRow,
   TableCell,
   TableHead,
+  TableBody,
+  TableFooter,
   Table,
   CircularProgress
 } from '@mui/material';
@@ -27,8 +29,8 @@ const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(() => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "white",
-    color: "rgba(0, 0, 0, 0.87)",
+    backgroundColor: "#ffffff", // White background for tooltip
+    color: "#000000", // Black text for tooltip
     fontSize: 11,
     minWidth: 110,
   },
@@ -38,7 +40,7 @@ function ConstituencyList() {
   return (
     <div>
       <Box sx={{ p: 2 }}>
-        <Typography sx={{ fontWeight: "bold", fontSize: "20px", textDecoration: "underline" }}>
+        <Typography sx={{ fontWeight: "bold", fontSize: "20px", textDecoration: "underline", color: "#00000" }}>
           Constituency List
         </Typography>
       </Box>
@@ -72,9 +74,9 @@ TablePaginationAction.propTypes = {
 export const CustomPagination = ({ count, page = 1, onPageChange }) => {
   const renderItem = (item) => (
     <PaginationItem {...item} sx={{
-      backgroundColor: item.page === page ? "white !important" : "transparent",
-      borderColor: item.page === page ? "white" : "#E3E4EB",
-      color: item.page === page ? "black" : "blue",
+      backgroundColor: item.page === page ? "#ffffff !important" : "transparent",
+      borderColor: item.page === page ? "#ffffff" : "#E3E4EB",
+      color: item.page === page ? "#000000" : "#2F4CDD",
       borderRadius: "5px",
       padding: "10px",
       m: 0.5,
@@ -120,22 +122,21 @@ function TableCustomized() {
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(10);
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('name'); // Assuming you want to sort by name
+  const [orderBy, setOrderBy] = useState('name');
   const [rows, setRows] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
-  const [loading, setLoading] = useState(true); // Added loading state
+  const [loading, setLoading] = useState(true);
 
   const getData = async (page = 1) => {
-    setLoading(true); // Set loading true when fetching data
+    setLoading(true);
     try {
       const res = await getConstituencies(page);
       setTotalItems(res.data.pagination.totalItems);
       setRows(res.data.data);
     } catch (error) {
-      // Handle error if needed
       console.error('Error fetching data:', error);
     } finally {
-      setLoading(false); // Set loading false after data is fetched
+      setLoading(false);
     }
   };
 
@@ -170,25 +171,28 @@ function TableCustomized() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>
+                <TableCell sx={{ color: 'white' }}>
                   <Tooltip title="Sort by Name" arrow>
                     <TableSortLabel
                       active={orderBy === 'name'}
                       direction={orderBy === 'name' ? order : 'asc'}
                       onClick={(event) => handleRequestSort(event, 'name')}
                       IconComponent={() => <IconComponents order={orderBy === 'name' ? order : 'asc'} />}
+                      sx={{ color: 'white' }}
                     >
                       Name
                     </TableSortLabel>
                   </Tooltip>
                 </TableCell>
-                {/* Add more TableCells as needed */}
+                <TableCell sx={{ color: 'white' }}>
+                  <Typography variant="h6">Action</Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
-            <tbody>
+            <TableBody>
               {rows.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{row.name}</TableCell>
+                  <TableCell sx={{ color: 'white' }}>{row.name}</TableCell>
                   <TableCell>
                     <LightTooltip
                       placement='bottom-end'
@@ -217,9 +221,9 @@ function TableCustomized() {
                           borderRadius: "8px",
                           height: "37px",
                           p: 1,
+                          backgroundColor: "white", // Ensure button background is white
                           "&:hover": {
-                            backgroundColor: "rgba(242, 244, 248, 0.25)",
-                            borderColor: "#2F4CDD",
+                            backgroundColor: "#f2f4f8",
                           }
                         }}
                       >
@@ -229,10 +233,10 @@ function TableCustomized() {
                   </TableCell>
                 </TableRow>
               ))}
-            </tbody>
-            <tfoot>
+            </TableBody>
+            <TableFooter>
               <TableRow>
-                <TableCell colSpan={7}>
+                <TableCell colSpan={2}>
                   <CustomTablePagination
                     count={Math.ceil(totalItems / rowsPerPage)}
                     page={page}
@@ -240,7 +244,7 @@ function TableCustomized() {
                   />
                 </TableCell>
               </TableRow>
-            </tfoot>
+            </TableFooter>
           </Table>
         )}
       </Root>
@@ -279,13 +283,19 @@ const CustomButton = styled(Button)({
 });
 
 const Root = styled('div')(({ theme }) => ({
+  backgroundColor: '#ffffff', // White background for the root component
+  color: '#000000', // Black text color
   '& .MuiTableHead-root': {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: '#ffffff', // White background for table header
+  },
+  '& .MuiTableBody-root': {
+    backgroundColor: '#ffffff', // White background for table body
   },
   '& .MuiTableCell-root': {
     borderBottom: `1px solid ${theme.palette.divider}`,
+    color: '#000000', // Black text color for table cells
   },
   '& .MuiTableSortLabel-root': {
-    color: theme.palette.text.primary,
+    color: '#000000', // Black color for sort labels
   },
 }));

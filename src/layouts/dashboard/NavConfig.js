@@ -8,7 +8,7 @@ const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
 const navConfig = [
   {
     title: 'dashboard',
-    path: '/dashboard/app',
+    path: '/dashboard',
     icon: getIcon('pajamas:tachometer'),
   },
   {
@@ -60,14 +60,14 @@ const navConfig = [
     // path: '/dashboard/Users',
     icon: getIcon('heroicons:users'),
     children: [
-      // {
-      //   title: 'Add User',
-      //   path: '/dashboard/Users/add',
-      // },
-      // {
-      //   title: 'Remove User',
-      //   path: '/dashboard/Users/remove',
-      // },
+      {
+        title: 'Add User',
+        path: '/dashboard/Users/add',
+      },
+      {
+        title: 'Remove User',
+        path: '/dashboard/Users/remove',
+      },
       {
         title: 'User List',
         path: '/dashboard/Users/list',

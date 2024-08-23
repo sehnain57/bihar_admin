@@ -4,19 +4,15 @@ import { styled } from '@mui/system';
 import {
   Box,
   Button,
-  Pagination,
   TableSortLabel,
   Tooltip,
   tooltipClasses,
   Typography,
-  PaginationItem,
   TableRow,
   TableCell,
   TableHead,
   Table,
 } from '@mui/material';
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -34,18 +30,17 @@ const LightTooltip = styled(({ className, ...props }) => (
 }));
 
 function KaryakarthasList() {
-  const [users, setUsers] = useState([]); // Initialize as an empty array
-  const [page, setPage] = useState(1);
+  const [users, setUsers] = useState([]);
   const rowsPerPage = 5;
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await getUsers('', page, rowsPerPage);
+        const response = await getUsers('', 1, rowsPerPage); // Removed the page variable
         console.log('API response:', response);
         
         if (response.data && Array.isArray(response.data.users)) {
-          setUsers(response.data.users); // Extract the users array
+          setUsers(response.data.users);
         } else {
           console.error('Expected an array but got:', response.data);
           setUsers([]);
@@ -57,7 +52,7 @@ function KaryakarthasList() {
     };
 
     fetchUsers();
-  }, [page]);
+  }, []);
 
   const handleRemoveUser = async (userId) => {
     try {
@@ -115,7 +110,7 @@ function TableCustomized({ users, onRemoveUser }) {
   return (
     <Box>
       <Root>
-        <Table aria-label="custom pagination table">
+        <Table aria-label="custom pagination table" sx={{backgroundColor:"white"}}>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -130,7 +125,21 @@ function TableCustomized({ users, onRemoveUser }) {
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
-              {/* More TableCells... */}
+              <TableCell>
+                <Tooltip title="Sort by Full Name" arrow>
+                  <TableSortLabel
+                    active={orderBy === 'fullName'}
+                    direction={orderBy === 'fullName' ? order : 'asc'}
+                    onClick={(event) => handleRequestSort(event, 'fullName')}
+                    IconComponent={() => <IconComponents order={orderBy === 'fullName' ? order : 'asc'} />}
+                  >
+                    Full Name
+                  </TableSortLabel>
+                </Tooltip>
+              </TableCell>
+              <TableCell>
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <tbody>
@@ -138,9 +147,6 @@ function TableCustomized({ users, onRemoveUser }) {
               <TableRow key={user.epicNo}>
                 <TableCell>{user.epicNo}</TableCell>
                 <TableCell>{user.fullName}</TableCell>
-                <TableCell>{user.phoneNumber}</TableCell>
-                <TableCell>{user.constituency}</TableCell>
-                <TableCell>{user.boothNo}</TableCell>
                 <TableCell>
                   <LightTooltip
                     placement='bottom-end'
@@ -178,7 +184,7 @@ function TableCustomized({ users, onRemoveUser }) {
                               cursor: "pointer",
                               color: "#FF0000",
                             }}
-                            onClick={() => onRemoveUser(user.id)} // Adjust according to your API response structure
+                            onClick={() => onRemoveUser(user.id)}
                           >
                             Remove
                           </Typography>
@@ -215,34 +221,6 @@ function TableCustomized({ users, onRemoveUser }) {
 TableCustomized.propTypes = {
   users: PropTypes.array.isRequired,
   onRemoveUser: PropTypes.func.isRequired,
-};
-
-function CustomButton({ children, onClick, disabled }) {
-  return (
-    <Button
-      onClick={onClick}
-      disabled={disabled}
-      sx={{
-        backgroundColor: "#2F4CDD",
-        color: "white",
-        width: '120px', // Set width of pagination buttons
-        margin: '0 4px',
-        textAlign: 'center',
-        borderRadius: "4px",
-        "&:hover": {
-          backgroundColor: "#2F4CDD"
-        }
-      }}
-    >
-      {children}
-    </Button>
-  );
-}
-
-CustomButton.propTypes = {
-  children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
 };
 
 const Root = styled('div')(({ theme }) => ({

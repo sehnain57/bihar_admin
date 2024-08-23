@@ -7,7 +7,7 @@ import { Box, Drawer } from '@mui/material';
 
 import useResponsive from '../../hooks/useResponsive';
 // components
-import Logo from '../../components/Logo';
+import Logo from '../../assest/logo.png';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 //
@@ -55,6 +55,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       sx={{
         height: 1,
         '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
+        backgroundColor:'white'
       }}
     >
       <Box sx={{ px: 2.5, py: 1, display: 'inline-flex' }} />

@@ -9,8 +9,8 @@ import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
 import Grievances from './pages/Grievances';
-// import AddUser from './pages/User/AddUser';
-// import RemoveUser from './pages/User/RemoveUser';
+import AddUser from './pages/User/AddUser';
+import RemoveUser from './pages/User/RemoveUser';
 import UserList from './pages/User/UserList';
 import AddEvent from './pages/Events/AddEvent';
 import EventsList from './pages/Events/EventsList';
@@ -33,11 +33,11 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { path: 'app', element: <DashboardApp /> },
+        { path: '', element: <DashboardApp /> },
         { path: 'Grievances', element: <Grievances /> },
-        // { path: 'Users/add', element: <AddUser /> },
+        { path: 'Users/add', element: <AddUser /> },
         { path: 'Users/list', element: <UserList /> },
-        // { path: 'Users/remove', element: <RemoveUser /> },
+        { path: 'Users/remove', element: <RemoveUser /> },
         { path: 'Events/add', element: <AddEvent /> },
         { path: 'Events/list', element: <EventsList /> },
         { path: 'Events/requests', element: <EventRequest /> },

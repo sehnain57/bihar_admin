@@ -1,42 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, Container, Typography, Grid, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Button, Container, Typography, Grid, FormControl } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import InputField from '../../components/InputField'; // Update the path as per your project structure
 import { addEvent } from '../../Api/event';
-import { getUsers } from '../../Api/user'; // Import the getUsers function
 
 const AddEvent = () => {
   const [formData, setFormData] = useState({
-    constituency: '',
-    toTime: '',
-    mobileNumber: '',
-    date: '',
-    status: 1,
-    fromTime: '',
-    owner: "admin",
-    documents: null, // Assuming document is a file
     eventTitle: '',
-    boothNumber: ''
+    date: '',
+    fromTime: '',
+    toTime: '',
+    constituency: '',
+    boothNumber: '',
+    status: 1,
+    documents: null, // Assuming document is a file
   });
 
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  // Remove the state and effect related to users
+  // const [users, setUsers] = useState([]);
+  // const [selectedUser, setSelectedUser] = useState(null);
 
   // Fetch users on component mount
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await getUsers();
-        setUsers(response.data.users || []);
-      } catch (error) {
-        console.error('Failed to fetch users:', error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const response = await getUsers();
+  //       setUsers(response.data.users || []);
+  //     } catch (error) {
+  //       console.error('Failed to fetch users:', error);
+  //     }
+  //   };
+  //   fetchUsers();
+  // }, []);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -46,19 +43,7 @@ const AddEvent = () => {
     });
   };
 
-  const handleUserChange = (e) => {
-    const userId = e.target.value;
-    const user = users.find(user => user.id === userId);
-    setSelectedUser(user);
-    if (user) {
-      setFormData({
-        ...formData,
-        mobileNumber: user.mobileNumber || '',
-        constituency: user.legislativeConstituency || '',
-        boothNumber: user.boothNameOrNumber || ''
-      });
-    }
-  };
+  // Remove the handleUserChange function
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,14 +52,14 @@ const AddEvent = () => {
     Object.keys(formData).forEach(key => {
       formDataToSend.append(key, formData[key]);
     });
-    console.log("form--------------------data",formDataToSend)
+    console.log("form--------------------data", formDataToSend);
     await addEvent(formDataToSend).then((res) => {
       console.log(res);
     });
   };
 
   return (
-    <Container maxWidth="md" style={{ marginTop: '50px' }}>
+    <Container maxWidth="md" style={{ marginTop: '50px', backgroundColor: "white", padding: 20, borderRadius: 5 }}>
       <Box>
         <Typography variant="h4" align="left" gutterBottom>
           Add Event
@@ -82,21 +67,6 @@ const AddEvent = () => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Select User by Mobile Number</InputLabel>
-                <Select
-                  value={selectedUser ? selectedUser.id : ''}
-                  onChange={handleUserChange}
-                  label="Select User by Mobile Number"
-                >
-                  {users.map(user => (
-                    <MenuItem key={user.id} value={user.id}>
-                      {user.mobileNumber}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
               <Box sx={{ border: '1px solid #e0e0e0', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar
@@ -144,6 +114,7 @@ const AddEvent = () => {
                 variant="outlined"
                 margin="normal"
               />
+
               <InputField
                 fullWidth
                 label="Event Description"
@@ -169,24 +140,24 @@ const AddEvent = () => {
                 />
                 <FormControl fullWidth margin="normal">
                   <Button
-  component="label"
-  htmlFor="file-input"
-  variant="outlined"
-  sx={{
-    width: 60,
-    height: 60,
-    minWidth: 60,
-    minHeight: 60,
-    borderRadius: '50%',
-    borderColor: '#007AFF',
-    backgroundColor: '#f0f0f0',
-    '&:hover': {
-      backgroundColor: '#e0e0e0',
-    },
-  }}
->
-  Add
-</Button>
+                    component="label"
+                    htmlFor="file-input"
+                    variant="outlined"
+                    sx={{
+                      width: 60,
+                      height: 60,
+                      minWidth: 60,
+                      minHeight: 60,
+                      borderRadius: '50%',
+                      borderColor: '#007AFF',
+                      backgroundColor: '#f0f0f0',
+                      '&:hover': {
+                        backgroundColor: '#e0e0e0',
+                      },
+                    }}
+                  >
+                    Add
+                  </Button>
                 </FormControl>
                 <Typography variant="caption" display="block">
                   Add Document (if any)

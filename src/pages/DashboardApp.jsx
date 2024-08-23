@@ -212,24 +212,67 @@
 //   );
 // }
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Grid, Card, CardContent, Typography, Button } from '@mui/material';
 import { PieChart, Pie, Cell } from 'recharts';
 import cardImg1 from "../assest/activity_1.png"
 import cardImg2 from "../assest/ic_customer.png"
+import {CountsTotalGet, CountsStatusGet} from '../Api/counts'; 
 
 
-const dataPie = [
-  { name: 'Total Grievances', value: 25 },
-  { name: 'Completed', value: 15 },
-  { name: 'Rejected', value: 7 },
-];
 
 
 
 const COLORS = ['#000091', '#DA0003', '#027402'];
 
 function DashboardApp ()  {
+  const [totalData, setTotalData] = useState({
+    userCount: 0,
+    grievanceCount: 0,
+    eventCount: 0,
+    epicUserCount: 0,
+    constituencyCount: 0,
+    boothCount: 0,
+    adminCount: 0,
+  });
+  const [statusData, setStatusData] = useState({
+    users: { active: 0, inactive: 0 },
+    epicUsers: { active: 0, inactive: 0 },
+    grievances: { accepted: 0, processing: 0, completed: 0, rejected: 0 },
+    events: { accepted: 0, processing: 0, completed: 0, rejected: 0 },
+  });
+
+  const dataPie = [
+    { name: 'Total Grievances', value: totalData.grievanceCount },
+    { name: 'Completed', value: statusData.grievances.completed },
+    { name: 'Rejected', value: 7 },
+  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const totalResponse = await CountsTotalGet();
+        if (totalResponse.success) {
+          setTotalData(totalResponse.data);
+        } else {
+          console.error('Failed to fetch total data:', totalResponse.message);
+        }
+
+        const statusResponse = await CountsStatusGet();
+        if (statusResponse.success) {
+          setStatusData(statusResponse.data);
+        } else {
+          console.error('Failed to fetch status data:', statusResponse.message);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
   return (
     <Box sx={{ padding: 1 }}>
       <Typography variant="h4" gutterBottom>
@@ -250,7 +293,7 @@ function DashboardApp ()  {
             </Box>
             <CardContent>
 
-              <Typography variant="h3">25</Typography>
+              <Typography variant="h3">{totalData.grievanceCount}</Typography>
               <Typography variant="subtitle1" sx={{ fontSize: "12px" }}>Total Grievances</Typography>
             </CardContent>
           </Card>
@@ -263,7 +306,7 @@ function DashboardApp ()  {
             </Box>
 
             <CardContent>
-              <Typography variant="h3">29</Typography>
+              <Typography variant="h3"> {statusData.grievances.completed}</Typography>
               <Typography variant="subtitle1" sx={{ fontSize: "12px" }}>Completed</Typography>
             </CardContent>
           </Card>
@@ -275,7 +318,7 @@ function DashboardApp ()  {
             </Box>
 
             <CardContent>
-              <Typography variant="h3">12000</Typography>
+              <Typography variant="h3">{totalData.epicUserCount}</Typography>
               <Typography variant="subtitle1" sx={{ fontSize: "10px" }}>Total Karyakarthas</Typography>
             </CardContent>
           </Card>
@@ -287,7 +330,7 @@ function DashboardApp ()  {
             </Box>
 
             <CardContent sx={{ padding: "10px" }}>
-              <Typography variant="h3">1,75,458</Typography>
+              <Typography variant="h3">{totalData.userCount}</Typography>
               <Typography variant="subtitle1" sx={{ fontSize: "12px" }}>Total Users</Typography>
             </CardContent>
           </Card>
@@ -320,7 +363,7 @@ function DashboardApp ()  {
               <Box sx={{ padding: "10px", borderRadius: "5px", backgroundColor: "#E9FFEF", display: "flex", justifyContent: "space-between" }}>
                 <Box sx={{ display: "flex", alignItems: "center", }}>
                   <Typography sx={{ backgroundColor: "#2BC155", color: "white", padding: "4px 16px", borderRadius: "10px", mr: 2 }}>
-                    25
+                  {totalData.grievanceCount}
                   </Typography>
                   <Typography>
                     New
@@ -336,15 +379,15 @@ function DashboardApp ()  {
 
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <Typography variant="h5">25</Typography>
+                  <Typography variant="h5">{totalData.grievanceCount}</Typography>
                   <Typography variant="subtitle1" sx={{ fontSize: "12px" }}>Total Grievances</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography variant="h5">15</Typography>
+                  <Typography variant="h5">{statusData.grievances.completed}</Typography>
                   <Typography variant="subtitle1" sx={{ fontSize: "12px" }}>Completed</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography variant="h5">7</Typography>
+                  <Typography variant="h5">{statusData.grievances.rejected}</Typography>
                   <Typography variant="subtitle1" sx={{ fontSize: "12px" }}>Rejected Grievances</Typography>
                 </Grid>
               </Grid>
@@ -377,9 +420,9 @@ function DashboardApp ()  {
                 {/* Progress Bars */}
                 <Box sx={{ padding: "10px", flexGrow: 1 }}>
   {[
-    { label: "Total Grievances", value: 25, progress: 70, color: "#000091" },
-    { label: "Completed", value: 15, progress: 50, color: "#DA0003" },
-    { label: "Pending", value: 7, progress: 20, color: "#027402" },
+    { label: "Total Grievances", value: totalData.grievanceCount, progress: 70, color: "#000091" },
+    { label: "Completed", value: statusData.grievances.completed, progress: 50, color: "#DA0003" },
+    { label: "Pending", value:  statusData.grievances.processing, progress: 20, color: "#027402" },
   ].map(({ label, value, progress, color }) => (
     <Box key={label} sx={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
       <Typography sx={{ width: "30%", fontSize: "14px" }}>
@@ -427,15 +470,15 @@ function DashboardApp ()  {
 
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <Typography variant="h5">1,75,458</Typography>
+                  <Typography variant="h5">{totalData.userCount}</Typography>
                   <Typography variant="subtitle1">Total Users</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography variant="h5">1,75,451</Typography>
+                  <Typography variant="h5">{statusData.users.active}</Typography>
                   <Typography variant="subtitle1">Active</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography variant="h5">7</Typography>
+                  <Typography variant="h5"> {statusData.users.inactive}</Typography>
                   <Typography variant="subtitle1">Inactive</Typography>
                 </Grid>
               </Grid>
@@ -461,9 +504,9 @@ function DashboardApp ()  {
 
 <Box sx={{ padding: "10px", flexGrow: 1 }}>
   {[
-    { label: "Total Grievances", value: 25, progress: 70, color: "#000091" },
-    { label: "Completed", value: 15, progress: 50, color: "#DA0003" },
-    { label: "Pending", value: 7, progress: 20, color: "#027402" },
+    { label: "Total Grievances", value: totalData.grievanceCount, progress: 70, color: "#000091" },
+    { label: "Completed", value: statusData.grievances.completed, progress: 50, color: "#DA0003" },
+    { label: "Pending", value:  statusData.grievances.processing, progress: 20, color: "#027402" },
   ].map(({ label, value, progress, color }) => (
     <Box key={label} sx={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
       <Typography sx={{ width: "30%", fontSize: "14px" }}>
@@ -493,7 +536,7 @@ function DashboardApp ()  {
             </Box>
 
             <CardContent>
-              <Typography variant="h3">25</Typography>
+              <Typography variant="h3">{totalData.constituencyCount}</Typography>
               <Typography variant="subtitle1" sx={{ fontSize: "10px" }}>Total Constituency's</Typography>
             </CardContent>
           </Card>
@@ -504,7 +547,7 @@ function DashboardApp ()  {
               <img src={cardImg1} alt="Card" />
             </Box>
             <CardContent>
-              <Typography variant="h3">279</Typography>
+              <Typography variant="h3">{totalData.boothCount}</Typography>
               <Typography variant="subtitle1" sx={{ fontSize: "12px" }}>Total Booths</Typography>
             </CardContent>
           </Card>

@@ -23,7 +23,8 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { deleteEvent, getEvents } from '../../Api/event';
+import { deleteEvent, getEvents} from '../../Api/event';
+import { getUsers } from '../../Api/user'
 import EventDetail from '../../components/EventDetail';
 
 const LightTooltip = styled(({ className, ...props }) => (
@@ -127,6 +128,7 @@ function TableCustomized() {
   const [rows, setRows] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [users, setUsers] = useState([]); // Add users state
 
   const getData = async (page = 1) => {
     setLoading(true); // Start loading
@@ -137,8 +139,15 @@ function TableCustomized() {
     });
   };
 
+  const getUsersData = async () => {
+    await getUsers().then((res) => {
+      setUsers(res.data.users); // Set the users data
+    });
+  };
+
   useEffect(() => {
     getData();
+    getUsersData(); // Fetch users data when component mounts
   }, []);
 
   const handleRequestSort = (event, property) => {
@@ -173,24 +182,41 @@ function TableCustomized() {
         </Box>
       ) : (
         <Root>
-          <Table aria-label="custom pagination table">
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Tooltip title="Sort by EPIC No." arrow>
-                    <TableSortLabel
-                      active={orderBy === 'epicNo'}
-                      direction={orderBy === 'epicNo' ? order : 'asc'}
-                      onClick={(event) => handleRequestSort(event, 'epicNo')}
-                      IconComponent={() => <IconComponents order={orderBy === 'epicNo' ? order : 'asc'} />}
-                    >
-                      Token ID
-                    </TableSortLabel>
-                  </Tooltip>
-                </TableCell>
-                {/* Other TableCells */}
-              </TableRow>
-            </TableHead>
+          <Table aria-label="custom pagination table" sx={{backgroundColor:"white"}}>
+          <TableHead>
+  <TableRow>
+    <TableCell>
+      <Tooltip title="Sort by EPIC No." arrow>
+        <TableSortLabel
+          active={orderBy === 'epicNo'}
+          direction={orderBy === 'epicNo' ? order : 'asc'}
+          onClick={(event) => handleRequestSort(event, 'epicNo')}
+          IconComponent={() => <IconComponents order={orderBy === 'epicNo' ? order : 'asc'} />}
+        >
+          Token ID
+        </TableSortLabel>
+      </Tooltip>
+    </TableCell>
+    <TableCell>
+      <Typography variant="h6" component="div">Date</Typography>
+    </TableCell>
+    <TableCell>
+      <Typography variant="h6" component="div">Mobile Number</Typography>
+    </TableCell>
+    <TableCell>
+      <Typography variant="h6" component="div">Constituency</Typography>
+    </TableCell>
+    <TableCell>
+      <Typography variant="h6" component="div">Booth Number</Typography>
+    </TableCell>
+    <TableCell>
+      <Typography variant="h6" component="div">Karyakartha</Typography>
+    </TableCell>
+    <TableCell>
+      <Typography variant="h6" component="div">Actions</Typography>
+    </TableCell>
+  </TableRow>
+</TableHead>
             <tbody>
               {rows.map((row) => (
                 <TableRow key={row.id}>
@@ -209,10 +235,11 @@ function TableCustomized() {
                       <MenuItem value="" disabled>
                         Select Karyakartha
                       </MenuItem>
-                      <MenuItem value="karyakartha1">Karyakartha 1</MenuItem>
-                      <MenuItem value="karyakartha2">Karyakartha 2</MenuItem>
-                      <MenuItem value="karyakartha3">Karyakartha 3</MenuItem>
-                      {/* Add more options as needed */}
+                      {users.map(user => (
+                        <MenuItem key={user.id} value={user.fullName}>
+                          {user.fullName}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </TableCell>
                   <TableCell>
@@ -270,7 +297,7 @@ function TableCustomized() {
           </Table>
         </Root>
       )}
-      <Box>
+      <Box sx={{backgroundColor:"white", marginTop:8}}>
         <EventDetail />
       </Box>
     </Box>
