@@ -111,3 +111,33 @@ export const deleteGrievance = async (grievanceId) => {
 
 }
 
+export const assignGrievanceUser = async (id, mobilenumber) => {
+    if (!id || mobilenumber === undefined) {
+        throw new Error('Invalid input: id and mobilenumber are required');
+    }
+
+    try {
+        // console.log("id check------------>", id, "statuss----->", statuss);
+        
+        // Ensure status is a number
+
+
+        const response = await axios.patch(
+            `${baseUrl}/api/grievances/v1/assignGrievance/${id}`,
+            { contactNumber: mobilenumber },
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                     Authorization: `Bearer ${getToken()}`
+                }
+            }
+        );
+        Swal.fire("Success", "Assign Grievance to User successfully", "success")
+        console.log('Assign updated successfully', response.data);
+        return response.data;
+    } catch (err) {
+        console.error('Error updating status:', err.response ? err.response.data : err.message);
+        throw err; // Re-throw the error if you want to handle it elsewhere
+    }
+};

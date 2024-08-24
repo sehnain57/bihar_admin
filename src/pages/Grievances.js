@@ -14,10 +14,10 @@ import {
   TextField,
   Autocomplete,
   Select,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 
-import { GrievancesGet } from '../Api/grievance';
+import { GrievancesGet, assignGrievanceUser } from '../Api/grievance';
 import { getUsers } from '../Api/user';
 
 const Grievances = () => {
@@ -44,12 +44,21 @@ const Grievances = () => {
     fetchData();
   }, []); // Empty dependency array means this effect runs only once
 
-  const handleKaryakarthaChange = (id, value) => {
-    setData(prevData =>
-      prevData.map(item =>
-        item.id === id ? { ...item, assignedTo: value?.fullName || '' } : item
-      )
-    );
+  const handleKaryakarthaChange = async (id, selectedUser) => {
+    if (selectedUser) {
+      const { mobileNumber } = selectedUser;
+
+      try {
+        await assignGrievanceUser(id, mobileNumber);
+        setData(prevData =>
+          prevData.map(item =>
+            item.id === id ? { ...item, assignedTo: selectedUser.fullName } : item
+          )
+        );
+      } catch (err) {
+        console.error('Error assigning grievance:', err);
+      }
+    }
   };
 
   const handleStatusChange = (id, value) => {

@@ -59,8 +59,10 @@ export const registerEpicUser = async (userData) => {
             }
         );
         // If the request is successful, the response will be returned
+        Swal.fire("Success", "User Added successfully", "success")
         return response.data;
     } catch (err) {
+        Swal.fire("Error", err.response ? err.response.data.message : err.message, "error");
         console.error('Registration failed:', err.response ? err.response.data : err.message);
         throw err;
     }

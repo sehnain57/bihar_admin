@@ -254,10 +254,11 @@ style={{
     backgroundColor: '#2F4CDD',
     color: 'white',
     borderRadius: '12px 32px 32px 12px', // Keep the initial curve
-    paddingRight: 4, // Increase padding to make space for the avatar
+    paddingRight: '50px', // Adjust to ensure space for both text and avatar
     paddingLeft: 2,
     textTransform: 'none',
     fontWeight: 'bold',
+    whiteSpace: 'nowrap', // Prevents text from wrapping
     position: 'relative', // Positioning the avatar relative to the button
     overflow: 'hidden', // Ensures the button retains its shape
     '&:hover': {

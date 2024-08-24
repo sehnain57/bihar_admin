@@ -50,7 +50,7 @@ export const updateStatus = async (id, statuss) => {
     }
 
     try {
-        console.log("id check------------>", id, "statuss----->", statuss);
+        // console.log("id check------------>", id, "statuss----->", statuss);
         
         // Ensure status is a number
 
