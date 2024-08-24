@@ -29,7 +29,7 @@ const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(() => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "white",
+    // backgroundColor: "white",
     color: "rgba(0, 0, 0, 0.87)",
     fontSize: 11,
     minWidth: 110,
@@ -38,7 +38,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 function BoothList() {
   return (
-    <Box sx={{ p: 2, backgroundColor: 'white', height: '100vh' }}>
+    <Box sx={{ p: 2, height: '100vh' }}>
       <Typography sx={{ fontWeight: "bold", fontSize: "20px", textDecoration: "underline" }}>
         Booth List
       </Typography>
@@ -160,14 +160,14 @@ function TableCustomized() {
   };
 
   return (
-    <Box sx={{ backgroundColor: 'white' }}> {/* Set background color for Box */}
+    <Box> {/* Set background color for Box */}
       <Root>
         {loading ? (
           <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
             <CircularProgress />
           </Box>
         ) : (
-          <Table aria-label="custom pagination table" sx={{ backgroundColor: 'white' }}> {/* Set table background color */}
+          <Table aria-label="custom pagination table" sx={{backgroundColor:"white"}}> {/* Set table background color */}
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -292,7 +292,7 @@ const CustomButton = styled(Button)({
 });
 
 const Root = styled('div')(({ theme }) => ({
-  backgroundColor: 'white', // Set background color for Root
+  // backgroundColor: 'white', // Set background color for Root
   '& .MuiTableHead-root': {
     backgroundColor: theme.palette.background.default,
   },

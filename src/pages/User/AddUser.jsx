@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Select, MenuItem, Button, Grid, InputLabel, FormControl } from '@mui/material';
 import InputField from '../../components/InputField'; // Update the path as per your project structure
+import { getAllBooths } from '../../Api/booth'; // Assuming this function fetches the booth data from the API
+import { getAllConstituencies } from '../../Api/constituencies';
 
 const AddUser = () => {
   const [formData, setFormData] = useState({
@@ -15,16 +17,42 @@ const AddUser = () => {
     email: '', // Add email if it's part of the form
   });
 
+  const [booths, setBooths] = useState([]);
+  const [constituencies, setConstituencies] = useState([]);
+
+  useEffect(() => {
+    const fetchBoothsAndConstituencies = async () => {
+      try {
+        const boothResponse = await getAllBooths();
+        const constituencyResponse = await getAllConstituencies();
+
+        if (boothResponse.success) {
+          setBooths(boothResponse.data);
+        }
+
+        if (constituencyResponse.success) {
+          setConstituencies(constituencyResponse.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchBoothsAndConstituencies();
+  }, []);
+
   const handleChange = (e) => {
-    // console.log(e.target.name)
-    setFormData({ ...formData, [e.target.name]: e.target.name === "age" ? parseInt(e.target.value, 10) : e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.name === 'age' ? parseInt(e.target.value, 10) : e.target.value,
+    });
   };
 
   const handleSubmit = async () => {
     try {
       // const response = await registerUser(formData);
       // console.log('User registered successfully:', response);
-      // Swal.fire("Success", "User added successfuly", "success")
+      // Swal.fire("Success", "User added successfully", "success")
     } catch (error) {
       console.error('Error during registration:', error);
       // Handle error, e.g., show an error message
@@ -48,7 +76,7 @@ const AddUser = () => {
             onChange={handleChange}
             variant="outlined"
             margin="normal"
-            sx={{ bgcolor: "#EAECF0" }}
+            sx={{ bgcolor: '#EAECF0' }}
           />
         </Grid>
 
@@ -62,7 +90,7 @@ const AddUser = () => {
             onChange={handleChange}
             variant="outlined"
             margin="normal"
-            sx={{ bgcolor: "#EAECF0" }}
+            sx={{ bgcolor: '#EAECF0' }}
           />
         </Grid>
 
@@ -74,7 +102,7 @@ const AddUser = () => {
               value={formData.gender}
               onChange={handleChange}
               variant="outlined"
-              sx={{ bgcolor: "#EAECF0" }}
+              sx={{ bgcolor: '#EAECF0' }}
             >
               <MenuItem value="MALE">Male</MenuItem>
               <MenuItem value="FEMALE">Female</MenuItem>
@@ -94,7 +122,7 @@ const AddUser = () => {
             onChange={handleChange}
             variant="outlined"
             margin="normal"
-            sx={{ bgcolor: "#EAECF0" }}
+            sx={{ bgcolor: '#EAECF0' }}
           />
         </Grid>
 
@@ -108,7 +136,7 @@ const AddUser = () => {
             onChange={handleChange}
             variant="outlined"
             margin="normal"
-            sx={{ bgcolor: "#EAECF0" }}
+            sx={{ bgcolor: '#EAECF0' }}
           />
         </Grid>
 
@@ -120,11 +148,13 @@ const AddUser = () => {
               value={formData.legislativeConstituency}
               onChange={handleChange}
               variant="outlined"
-              sx={{ bgcolor: "#EAECF0" }}
+              sx={{ bgcolor: '#EAECF0', marginTop:2 }}
             >
-              <MenuItem value="Constituency 1">Constituency 1</MenuItem>
-              <MenuItem value="Constituency 2">Constituency 2</MenuItem>
-              <MenuItem value="Constituency 3">Constituency 3</MenuItem>
+              {constituencies.map((constituency) => (
+                <MenuItem key={constituency.id} value={constituency.name}>
+                  {constituency.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -137,11 +167,13 @@ const AddUser = () => {
               value={formData.boothNameOrNumber}
               onChange={handleChange}
               variant="outlined"
-              sx={{ bgcolor: "#EAECF0" }}
+              sx={{ bgcolor: '#EAECF0', marginTop:2 }}
             >
-              <MenuItem value="Booth 1">Booth 1</MenuItem>
-              <MenuItem value="Booth 2">Booth 2</MenuItem>
-              <MenuItem value="Booth 3">Booth 3</MenuItem>
+              {booths.map((booth) => (
+                <MenuItem key={booth.id} value={booth.name}>
+                  {booth.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -156,7 +188,7 @@ const AddUser = () => {
             onChange={handleChange}
             variant="outlined"
             margin="normal"
-            sx={{ bgcolor: "#EAECF0" }}
+            sx={{ bgcolor: '#EAECF0' }}
           />
         </Grid>
 
@@ -170,7 +202,7 @@ const AddUser = () => {
             onChange={handleChange}
             variant="outlined"
             margin="normal"
-            sx={{ bgcolor: "#EAECF0" }}
+            sx={{ bgcolor: '#EAECF0' }}
           />
         </Grid>
 

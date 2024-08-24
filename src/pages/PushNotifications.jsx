@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, Typography, Grid, IconButton } from '@mui/material';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { Box, Button, Container, Typography, Grid} from '@mui/material';
+// import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
@@ -76,14 +76,14 @@ const AddEvent = () => {
               sx={{ mb: 4 }}
 
             />
-            <Box sx={{ marginTop: '16px', textAlign: 'center' }}>
+            {/* <Box sx={{ marginTop: '16px', textAlign: 'center' }}>
               <IconButton color="primary">
                 <AttachFileIcon />
               </IconButton>
               <Typography variant="caption" display="block">
                 Add Document (if any)
               </Typography>
-            </Box>
+            </Box> */}
           </Grid>
 
           <Grid item xs={12} md={6}>

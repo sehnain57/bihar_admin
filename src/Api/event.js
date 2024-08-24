@@ -44,26 +44,35 @@ export const getEvents = async (page) => {
         throw error;
     }
 };
+export const updateStatus = async (id, statuss) => {
+    if (!id || statuss === undefined) {
+        throw new Error('Invalid input: id and status are required');
+    }
 
-// export const updateStatus = async (id, status) => {
-//     try {
-//         const response = await axios.patch(
-//             `${baseUrl}/api/events/v1/events/status/${id}`,
-//             { status },
-//             {
-//                 headers: {
-//                     'Accept': 'application/json',
-//                     'Content-Type': 'application/json'
-//                 }
-//             }
-//         );
-//         console.log('Status updated successfully', response.data);
-//         return response.data;
-//     } catch (err) {
-//         console.error('Error updating status:', err);
-//         throw err; // Re-throw the error if you want to handle it elsewhere
-//     }
-// };
+    try {
+        console.log("id check------------>", id, "statuss----->", statuss);
+        
+        // Ensure status is a number
+
+
+        const response = await axios.patch(
+            `${baseUrl}/api/events/v1/events/status/${id}`,
+            { status: statuss },
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        console.log('Status updated successfully', response.data);
+        return response.data;
+    } catch (err) {
+        console.error('Error updating status:', err.response ? err.response.data : err.message);
+        throw err; // Re-throw the error if you want to handle it elsewhere
+    }
+};
 
 
 export const updateEvent = async (eventId, data) => {

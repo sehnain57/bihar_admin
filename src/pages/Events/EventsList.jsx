@@ -16,7 +16,11 @@ import {
   TableHead,
   Table,
   Select,
-  MenuItem
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
@@ -129,7 +133,8 @@ function TableCustomized() {
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true); // Add loading state
   const [users, setUsers] = useState([]); // Add users state
-
+  const [open, setOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const getData = async (page = 1) => {
     setLoading(true); // Start loading
     await getEvents(page).then((res) => {
@@ -173,7 +178,23 @@ function TableCustomized() {
       )
     );
   };
-
+ // Function to generate a formatted Token ID
+ const formatTokenId = (id) => {
+  // Convert id to string (in case it's a number) and extract the first 5 digits
+  const idStr = id.toString();
+  const firstFiveDigits = idStr.substring(0, 5);
+  
+  // Return formatted Token ID
+  return `ID-${firstFiveDigits}`;
+};
+const handleOpenDetails = (event) => {
+  setSelectedEvent(event);
+  setOpen(true);
+};
+const handleCloseDetails = () => {
+  setOpen(false);
+  setSelectedEvent(null);
+};
   return (
     <Box>
       {loading ? ( // Conditionally render loading indicator
@@ -187,14 +208,14 @@ function TableCustomized() {
   <TableRow>
     <TableCell>
       <Tooltip title="Sort by EPIC No." arrow>
-        <TableSortLabel
-          active={orderBy === 'epicNo'}
-          direction={orderBy === 'epicNo' ? order : 'asc'}
-          onClick={(event) => handleRequestSort(event, 'epicNo')}
-          IconComponent={() => <IconComponents order={orderBy === 'epicNo' ? order : 'asc'} />}
-        >
-          Token ID
-        </TableSortLabel>
+      <TableSortLabel
+                      active={orderBy === 'epicNo'}
+                      direction={orderBy === 'epicNo' ? order : 'asc'}
+                      onClick={(event) => handleRequestSort(event, 'epicNo')}
+                      IconComponent={() => <IconComponents order={orderBy === 'epicNo' ? order : 'asc'} />}
+                    >
+                      Token ID
+                    </TableSortLabel>
       </Tooltip>
     </TableCell>
     <TableCell>
@@ -220,7 +241,8 @@ function TableCustomized() {
             <tbody>
               {rows.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{row.epicId}</TableCell>
+                   <TableCell>{formatTokenId(row.id)}</TableCell>
+                
                   <TableCell>{`${row.date.slice(0, 10)} ${row.date.slice(11, 16)}`}</TableCell>
                   <TableCell>{row.mobileNumber}</TableCell>
                   <TableCell>{row?.constituency || "constituency not found"}</TableCell>
@@ -248,7 +270,10 @@ function TableCustomized() {
                       title={
                         <Box>
                           <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                            <Typography sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}>
+                          <Typography
+                              sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}
+                              onClick={() => handleOpenDetails(row)}
+                            >
                               View Details
                             </Typography>
                           </Box>
@@ -295,6 +320,23 @@ function TableCustomized() {
               </TableRow>
             </tfoot>
           </Table>
+          <Dialog open={open} onClose={handleCloseDetails}>
+            <DialogTitle>Event Details</DialogTitle>
+            <DialogContent>
+              <Typography variant="h6">Event Title: {selectedEvent?.eventTitle}</Typography>
+              <Typography>Date: {`${selectedEvent?.date.slice(0, 10)} ${selectedEvent?.date.slice(11, 16)}`}</Typography>
+              <Typography>Mobile Number: {selectedEvent?.mobileNumber}</Typography>
+              <Typography>Constituency: {selectedEvent?.constituency || "constituency not found"}</Typography>
+              <Typography>Booth Number: {selectedEvent?.boothNumber}</Typography>
+              <Typography>Created At: {new Date(selectedEvent?.createdAt).toLocaleDateString()} {new Date(selectedEvent?.createdAt).toLocaleTimeString()}</Typography>
+              <Typography>Updated At: {new Date(selectedEvent?.updatedAt).toLocaleDateString()} {new Date(selectedEvent?.updatedAt).toLocaleTimeString()}</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDetails} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Root>
       )}
       <Box sx={{backgroundColor:"white", marginTop:8}}>

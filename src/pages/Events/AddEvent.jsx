@@ -3,6 +3,7 @@ import { Box, Button, Container, Typography, Grid, FormControl } from '@mui/mate
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import dayjs from 'dayjs';
 import InputField from '../../components/InputField'; // Update the path as per your project structure
 import { addEvent } from '../../Api/event';
 
@@ -18,41 +19,37 @@ const AddEvent = () => {
     documents: null, // Assuming document is a file
   });
 
-  // Remove the state and effect related to users
-  // const [users, setUsers] = useState([]);
-  // const [selectedUser, setSelectedUser] = useState(null);
-
-  // Fetch users on component mount
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const response = await getUsers();
-  //       setUsers(response.data.users || []);
-  //     } catch (error) {
-  //       console.error('Failed to fetch users:', error);
-  //     }
-  //   };
-  //   fetchUsers();
-  // }, []);
-
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'file' ? files[0] : value
+      [name]: type === 'file' ? files[0] : value,
     });
   };
-
-  // Remove the handleUserChange function
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Manually convert date to UTC ISO format
+    const localDate = dayjs(formData.date);
+    const utcDate = localDate.add(localDate.utcOffset(), 'minute').format(); // Manually adjust for UTC
+
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach(key => {
-      formDataToSend.append(key, formData[key]);
-    });
-    console.log("form--------------------data", formDataToSend);
+
+    // Append all the form data, with the manually converted UTC date
+    formDataToSend.append('eventTitle', formData.eventTitle);
+    formDataToSend.append('date', utcDate);
+    formDataToSend.append('fromTime', formData.fromTime);
+    formDataToSend.append('toTime', formData.toTime);
+    formDataToSend.append('constituency', formData.constituency);
+    formDataToSend.append('boothNumber', formData.boothNumber);
+    formDataToSend.append('status', formData.status);
+    if (formData.documents) {
+      formDataToSend.append('documents', formData.documents);
+    }
+
+    console.log("Form Data being sent:", formDataToSend);
+
     await addEvent(formDataToSend).then((res) => {
       console.log(res);
     });
@@ -70,14 +67,14 @@ const AddEvent = () => {
               <Box sx={{ border: '1px solid #e0e0e0', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar
-                    onChange={(date) => setFormData({ ...formData, date: date.format('YYYY-MM-DD') })}
+                    onChange={(date) => setFormData({ ...formData, date })}
                   />
                 </LocalizationProvider>
               </Box>
 
               <InputField
                 fullWidth
-                type='time'
+                type="time"
                 label="Select Start Time"
                 placeholder="Select Time"
                 name="fromTime"
@@ -90,7 +87,7 @@ const AddEvent = () => {
 
               <InputField
                 fullWidth
-                type='time'
+                type="time"
                 label="Select End Time"
                 placeholder="Select Time"
                 name="toTime"
@@ -100,7 +97,6 @@ const AddEvent = () => {
                 margin="normal"
                 sxLabel={{ marginTop: "20px" }}
               />
-
             </Grid>
 
             <Grid item xs={12} md={6}>

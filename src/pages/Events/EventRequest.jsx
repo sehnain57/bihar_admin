@@ -20,14 +20,18 @@ import {
   TableFooter,
   CircularProgress,
   TableContainer,
-  Paper
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { deleteEvent, getEvents } from '../../Api/event';
+import { deleteEvent, getEvents, updateStatus } from '../../Api/event';
 
 const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -130,6 +134,8 @@ function TableCustomized() {
   const [rows, setRows] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const getData = async (page = 1) => {
     try {
@@ -163,9 +169,37 @@ function TableCustomized() {
     await getData();
   };
 
-  const handleStatusChange = (id, value) => {
-    console.log(id, value);
-    // Optionally, update the backend or trigger any other action here
+  const handleStatusChange = async (id, value) => {
+    try {
+      await updateStatus(id, value);
+      setRows((prevRows) =>
+        prevRows.map((row) =>
+          row.id === id ? { ...row, status: value } : row
+        )
+      );
+    } catch (err) {
+      console.error('Failed to update status:', err);
+    }
+  };
+
+  const handleOpenDetails = (event) => {
+    setSelectedEvent(event);
+    setOpen(true);
+  };
+
+  const handleCloseDetails = () => {
+    setOpen(false);
+    setSelectedEvent(null);
+  };
+
+  // Function to generate a formatted Token ID
+  const formatTokenId = (id) => {
+    // Convert id to string (in case it's a number) and extract the first 5 digits
+    const idStr = id.toString();
+    const firstFiveDigits = idStr.substring(0, 5);
+    
+    // Return formatted Token ID
+    return `ID-${firstFiveDigits}`;
   };
 
   return (
@@ -175,106 +209,129 @@ function TableCustomized() {
           <CircularProgress />
         </Box>
       ) : (
-        <Table aria-label="custom pagination table" sx={{ backgroundColor: "white" }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Tooltip title="Sort by EPIC No." arrow>
-                  <TableSortLabel
-                    active={orderBy === 'epicNo'}
-                    direction={orderBy === 'epicNo' ? order : 'asc'}
-                    onClick={(event) => handleRequestSort(event, 'epicNo')}
-                    IconComponent={() => <IconComponents order={orderBy === 'epicNo' ? order : 'asc'} />}
-                  >
-                    Token ID
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Mobile Number</TableCell>
-              <TableCell>Constituency</TableCell>
-              <TableCell>Booth Number</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>{row.epicId}</TableCell>
-                <TableCell>{`${row.date.slice(0, 10)} ${row.date.slice(11, 16)}`}</TableCell>
-                <TableCell>{row.mobileNumber}</TableCell>
-                <TableCell>{row?.constituency || "constituency not found"}</TableCell>
-                <TableCell>{row.boothNumber}</TableCell>
+        <>
+          <Table aria-label="custom pagination table" sx={{ backgroundColor: "white" }}>
+            <TableHead>
+              <TableRow>
                 <TableCell>
-                  <Select
-                    value={row.status !== undefined ? String(row.status) : ''}
-                    onChange={(e) => handleStatusChange(row.id, e.target.value)}
-                    displayEmpty
-                    fullWidth
-                  >
-                    <MenuItem value="" disabled>
-                      Select Status
-                    </MenuItem>
-                    <MenuItem value="0">Accepted</MenuItem>
-                    <MenuItem value="1">Processing</MenuItem>
-                    <MenuItem value="2">Completed</MenuItem>
-                    <MenuItem value="3">Rejected</MenuItem>
-                  </Select>
-                </TableCell>
-                <TableCell>
-                  <LightTooltip
-                    placement='bottom-end'
-                    title={
-                      <Box>
-                        <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                          <Typography sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}>
-                            View Details
-                          </Typography>
-                        </Box>
-                        <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                          <Typography
-                            sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#FF0000" }}
-                            onClick={() => removeEvent(row.id)}
-                          >
-                            Remove
-                          </Typography>
-                        </Box>
-                      </Box>
-                    }
-                  >
-                    <Button
-                      sx={{
-                        color: "#3E4954",
-                        textTransform: "none",
-                        borderRadius: "8px",
-                        height: "37px",
-                        p: 1,
-                        "&:hover": {
-                          backgroundColor: "rgba(242, 244, 248, 0.25)",
-                          borderColor: "#2F4CDD",
-                        }
-                      }}
+                  <Tooltip title="Sort by EPIC No." arrow>
+                    <TableSortLabel
+                      active={orderBy === 'epicNo'}
+                      direction={orderBy === 'epicNo' ? order : 'asc'}
+                      onClick={(event) => handleRequestSort(event, 'epicNo')}
+                      IconComponent={() => <IconComponents order={orderBy === 'epicNo' ? order : 'asc'} />}
                     >
-                      <MoreHorizIcon />
-                    </Button>
-                  </LightTooltip>
+                      Token ID
+                    </TableSortLabel>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Mobile Number</TableCell>
+                <TableCell>Constituency</TableCell>
+                <TableCell>Booth Number</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{formatTokenId(row.id)}</TableCell>
+                  <TableCell>{`${row.date.slice(0, 10)} ${row.date.slice(11, 16)}`}</TableCell>
+                  <TableCell>{row.mobileNumber}</TableCell>
+                  <TableCell>{row?.constituency || "constituency not found"}</TableCell>
+                  <TableCell>{row.boothNumber}</TableCell>
+                  <TableCell>
+                    <Select
+                      value={row.status !== undefined ? String(row.status) : ''}
+                      onChange={(e) => handleStatusChange(row.id, e.target.value)}
+                      displayEmpty
+                      fullWidth
+                    >
+                      <MenuItem value="" disabled>
+                        Select Status
+                      </MenuItem>
+                      <MenuItem value="0">Accepted</MenuItem>
+                      <MenuItem value="1">Pending</MenuItem>
+                      <MenuItem value="2">Completed</MenuItem>
+                      <MenuItem value="3">Rejected</MenuItem>
+                    </Select>
+                  </TableCell>
+                  <TableCell>
+                    <LightTooltip
+                      placement='bottom-end'
+                      title={
+                        <Box>
+                          <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
+                            <Typography
+                              sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}
+                              onClick={() => handleOpenDetails(row)}
+                            >
+                              View Details
+                            </Typography>
+                          </Box>
+                          <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
+                            <Typography
+                              sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#FF0000" }}
+                              onClick={() => removeEvent(row.id)}
+                            >
+                              Remove
+                            </Typography>
+                          </Box>
+                        </Box>
+                      }
+                    >
+                      <Button
+                        sx={{
+                          color: "#3E4954",
+                          textTransform: "none",
+                          borderRadius: "8px",
+                          height: "37px",
+                          p: 1,
+                          "&:hover": {
+                            backgroundColor: "rgba(242, 244, 248, 0.25)",
+                            borderColor: "#2F4CDD",
+                          }
+                        }}
+                      >
+                        <MoreHorizIcon />
+                      </Button>
+                    </LightTooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={7}>
+                  <CustomTablePagination
+                    count={Math.ceil(totalItems / rowsPerPage)}
+                    page={page}
+                    onPageChange={handleChangePage}
+                  />
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={7}>
-                <CustomTablePagination
-                  count={Math.ceil(totalItems / rowsPerPage)}
-                  page={page}
-                  onPageChange={handleChangePage}
-                />
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+            </TableFooter>
+          </Table>
+
+          <Dialog open={open} onClose={handleCloseDetails}>
+            <DialogTitle>Event Details</DialogTitle>
+            <DialogContent>
+              <Typography variant="h6">Event Title: {selectedEvent?.eventTitle}</Typography>
+              <Typography>Date: {`${selectedEvent?.date.slice(0, 10)} ${selectedEvent?.date.slice(11, 16)}`}</Typography>
+              <Typography>Mobile Number: {selectedEvent?.mobileNumber}</Typography>
+              <Typography>Constituency: {selectedEvent?.constituency || "constituency not found"}</Typography>
+              <Typography>Booth Number: {selectedEvent?.boothNumber}</Typography>
+              <Typography>Created At: {new Date(selectedEvent?.createdAt).toLocaleDateString()} {new Date(selectedEvent?.createdAt).toLocaleTimeString()}</Typography>
+              <Typography>Updated At: {new Date(selectedEvent?.updatedAt).toLocaleDateString()} {new Date(selectedEvent?.updatedAt).toLocaleTimeString()}</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDetails} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </>
       )}
     </Box>
   );
@@ -309,5 +366,3 @@ const CustomButton = styled(Button)({
     backgroundColor: "#2F4CDD",
   },
 });
-
-
