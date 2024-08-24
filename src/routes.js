@@ -33,7 +33,8 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { path: '', element: <DashboardApp /> },
+        { path: '', element: <Navigate to="app" /> },
+        { path: 'app', element: <DashboardApp /> },
         { path: 'Grievances', element: <Grievances /> },
         { path: 'Users/add', element: <AddUser /> },
         { path: 'Users/list', element: <UserList /> },

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, Container, Typography, Paper, CircularProgress, TextField } from '@mui/material';
-import { loginUser } from '../../Api/karyakarthas'; // Ensure this path is correct
+// import { loginUser } from '../../Api/karyakarthas'; // Ensure this path is correct
 
 const AddKaryakartha = () => {
   const [loginData, setLoginData] = useState({
@@ -21,7 +21,7 @@ const AddKaryakartha = () => {
     setSuccessMessage('');
 
     try {
-      const data = await loginUser(loginData);
+      // const data = await loginUser(loginData);
       setSuccessMessage('User logged in successfully');
       // Handle further actions here, such as redirecting the user or saving tokens
     } catch (error) {
@@ -101,7 +101,7 @@ const AddKaryakartha = () => {
         </Paper>
       </Box>
 
-      <Box sx={{ textAlign: 'center', marginTop: '40px' }}>
+      {/* <Box sx={{ textAlign: 'center', marginTop: '40px' }}>
         <Button
           variant="contained"
           sx={{ backgroundColor: "#007AFF", padding: '10px 30px', fontSize: '16px' }}
@@ -109,7 +109,7 @@ const AddKaryakartha = () => {
         >
           Add as Karyakartha
         </Button>
-      </Box>
+      </Box> */}
     </Container>
   );
 };

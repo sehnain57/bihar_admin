@@ -3,6 +3,7 @@ import { Box, Typography, Select, MenuItem, Button, Grid, InputLabel, FormContro
 import InputField from '../../components/InputField'; // Update the path as per your project structure
 import { getAllBooths } from '../../Api/booth'; // Assuming this function fetches the booth data from the API
 import { getAllConstituencies } from '../../Api/constituencies';
+import { registerEpicUser } from '../../Api/user'; // Import the registerEpicUser function
 
 const AddUser = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const AddUser = () => {
     legislativeConstituency: '',
     boothNameOrNumber: '',
     mobileNumber: '',
-    email: '', // Add email if it's part of the form
+    email: '',
   });
 
   const [booths, setBooths] = useState([]);
@@ -50,9 +51,9 @@ const AddUser = () => {
 
   const handleSubmit = async () => {
     try {
-      // const response = await registerUser(formData);
-      // console.log('User registered successfully:', response);
-      // Swal.fire("Success", "User added successfully", "success")
+      const response = await registerEpicUser(formData);
+      console.log('User registered successfully:', response);
+      // You can add a success notification here
     } catch (error) {
       console.error('Error during registration:', error);
       // Handle error, e.g., show an error message
@@ -66,6 +67,7 @@ const AddUser = () => {
       </Typography>
 
       <Grid container spacing={2}>
+        {/* Other input fields... */}
         <Grid item xs={12}>
           <InputField
             fullWidth

@@ -15,8 +15,6 @@ import {
   TableCell,
   TableHead,
   Table,
-  Select,
-  MenuItem,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -28,7 +26,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { deleteEvent, getEvents} from '../../Api/event';
-import { getUsers } from '../../Api/user'
+// import { getUsers } from '../../Api/user'
 import EventDetail from '../../components/EventDetail';
 
 const LightTooltip = styled(({ className, ...props }) => (
@@ -132,7 +130,7 @@ function TableCustomized() {
   const [rows, setRows] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true); // Add loading state
-  const [users, setUsers] = useState([]); // Add users state
+  // const [users, setUsers] = useState([]); // Add users state
   const [open, setOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const getData = async (page = 1) => {
@@ -144,15 +142,15 @@ function TableCustomized() {
     });
   };
 
-  const getUsersData = async () => {
-    await getUsers().then((res) => {
-      setUsers(res.data.users); // Set the users data
-    });
-  };
+  // const getUsersData = async () => {
+  //   await getUsers().then((res) => {
+  //     setUsers(res.data.users); // Set the users data
+  //   });
+  // };
 
   useEffect(() => {
     getData();
-    getUsersData(); // Fetch users data when component mounts
+    // getUsersData(); // Fetch users data when component mounts
   }, []);
 
   const handleRequestSort = (event, property) => {
@@ -171,13 +169,13 @@ function TableCustomized() {
     await getData();
   };
 
-  const handleKaryakarthaChange = (id, value) => {
-    setRows(prevRows =>
-      prevRows.map(row =>
-        row.id === id ? { ...row, karyakartha: value } : row
-      )
-    );
-  };
+  // const handleKaryakarthaChange = (id, value) => {
+  //   setRows(prevRows =>
+  //     prevRows.map(row =>
+  //       row.id === id ? { ...row, karyakartha: value } : row
+  //     )
+  //   );
+  // };
  // Function to generate a formatted Token ID
  const formatTokenId = (id) => {
   // Convert id to string (in case it's a number) and extract the first 5 digits
@@ -230,9 +228,9 @@ const handleCloseDetails = () => {
     <TableCell>
       <Typography variant="h6" component="div">Booth Number</Typography>
     </TableCell>
-    <TableCell>
+    {/* <TableCell>
       <Typography variant="h6" component="div">Karyakartha</Typography>
-    </TableCell>
+    </TableCell> */}
     <TableCell>
       <Typography variant="h6" component="div">Actions</Typography>
     </TableCell>
@@ -247,7 +245,7 @@ const handleCloseDetails = () => {
                   <TableCell>{row.mobileNumber}</TableCell>
                   <TableCell>{row?.constituency || "constituency not found"}</TableCell>
                   <TableCell>{row.boothNumber}</TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <Select
                       value={row.karyakartha || ''}
                       onChange={(e) => handleKaryakarthaChange(row.id, e.target.value)}
@@ -263,7 +261,7 @@ const handleCloseDetails = () => {
                         </MenuItem>
                       ))}
                     </Select>
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <LightTooltip
                       placement='bottom-end'
