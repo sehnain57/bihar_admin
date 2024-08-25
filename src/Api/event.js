@@ -30,7 +30,47 @@ export const getEvents = async (page) => {
     try {
         const response = await axios.get(`${baseUrl}/api/events/v1/events`, {
             headers: {
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                
+            },
+            params: { page }
+        });
+
+        console.log("all events from api", response.data)
+        // Return the response data
+        return response.data;
+    } catch (error) {
+        // Handle any errors
+        console.error('Error fetching events:', error);
+        throw error;
+    }
+};
+export const getAdminEvents = async (page) => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/events/v1/admin/list`, {
+            headers: {
+                'Accept': 'application/json',
+                 Authorization: `Bearer ${getToken()}`
+            },
+            params: { page }
+        });
+
+        console.log("all events from api", response.data)
+        // Return the response data
+        return response.data;
+    } catch (error) {
+        // Handle any errors
+        console.error('Error fetching events:', error);
+        throw error;
+    }
+};
+
+export const getRequestedEvents = async (page) => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/events/v1/admin/requested`, {
+            headers: {
+                'Accept': 'application/json',
+                Authorization: `Bearer ${getToken()}`
             },
             params: { page }
         });

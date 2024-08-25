@@ -31,7 +31,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { deleteEvent, getEvents, updateStatus } from '../../Api/event';
+import { deleteEvent, getRequestedEvents, updateStatus } from '../../Api/event';
 
 const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -139,7 +139,7 @@ function TableCustomized() {
 
   const getData = async (page = 1) => {
     try {
-      const res = await getEvents(page);
+      const res = await getRequestedEvents(page);
       setTotalItems(res.data.pagination.totalItems);
       setRows(res.data.data);
       setLoading(false);

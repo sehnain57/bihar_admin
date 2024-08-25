@@ -25,7 +25,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { deleteEvent, getEvents} from '../../Api/event';
+import { deleteEvent, getAdminEvents} from '../../Api/event';
 // import { getUsers } from '../../Api/user'
 import EventDetail from '../../components/EventDetail';
 
@@ -135,7 +135,7 @@ function TableCustomized() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const getData = async (page = 1) => {
     setLoading(true); // Start loading
-    await getEvents(page).then((res) => {
+    await getAdminEvents(page).then((res) => {
       setTotalItems(res.data.pagination.totalItems);
       setRows(res.data.data);
       setLoading(false); // Stop loading

@@ -49,8 +49,10 @@ export const getConstituencies = async (page = 1, limit = 10) => {
 
         return response.data;
     } catch (err) {
+        Swal.fire("No", "No Found constituencies.", "Found");
         console.error('Failed to fetch constituencies:', err.response ? err.response.data : err.message);
-        throw err;
+        // No re-throwing of the error here, so the function won't propagate the error further.
+        return null; 
     }
 };
 
