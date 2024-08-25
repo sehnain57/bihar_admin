@@ -74,7 +74,7 @@ export const getAllBooths = async () => {
         'Content-Type': 'application/json',
       },
     });
-    Swal.fire("Success", "Booths fetched successfully", "success");
+    // Swal.fire("Success", "Booths fetched successfully", "success");
     return response.data;
   } catch (error) {
     console.error('Error fetching all booths:', error);

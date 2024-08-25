@@ -84,6 +84,26 @@ export const getRequestedEvents = async (page) => {
         throw error;
     }
 };
+
+export const getAcceptedEvents = async (page) => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/events/v1/admin/list/accepted`, {
+            headers: {
+                'Accept': 'application/json',
+                Authorization: `Bearer ${getToken()}`
+            },
+            params: { page }
+        });
+
+        console.log("all events from api", response.data)
+        // Return the response data
+        return response.data;
+    } catch (error) {
+        // Handle any errors
+        console.error('Error fetching events:', error);
+        throw error;
+    }
+};
 export const updateStatus = async (id, statuss) => {
     if (!id || statuss === undefined) {
         throw new Error('Invalid input: id and status are required');

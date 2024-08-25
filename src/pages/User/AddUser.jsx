@@ -16,6 +16,7 @@ const AddUser = () => {
     boothNameOrNumber: '',
     mobileNumber: '',
     email: '',
+    timeZone: '', // Adding timeZone field
   });
 
   const [booths, setBooths] = useState([]);
@@ -39,7 +40,12 @@ const AddUser = () => {
       }
     };
 
+    // Fetch booth and constituency data
     fetchBoothsAndConstituencies();
+
+    // Get the user's timezone and update the formData state
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setFormData(prevFormData => ({ ...prevFormData, timeZone: userTimeZone }));
   }, []);
 
   const handleChange = (e) => {

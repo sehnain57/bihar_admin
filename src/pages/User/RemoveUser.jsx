@@ -1,39 +1,37 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, Typography, Paper } from '@mui/material';
-import { getUsers, removeUser } from '../../Api/user';
+import Swal from 'sweetalert2'; // Ensure to include SweetAlert2 in your project
+import { Box, Button, Container, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { searchEpicUsers } from "../../Api/user";
 import InputField from '../../components/InputField'; // Update the path according to your project structure
 
 const RemoveUser = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
+    mobileNumber: '',
     epicNumber: '',
   });
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSearch = async () => {
-    // Add your search logic here
-    await getUsers(formData.fullName).then((res) => {
-      console.log(res)
-    })
-    console.log('Search Data:', formData);
+    try {
+      const result = await searchEpicUsers(formData.mobileNumber, formData.epicNumber);
+      setSearchResults(result.data); // Assuming result.data contains the user details
+      Swal.fire("Success", "User search successful", "success");
+    } catch (error) {
+      Swal.fire("Error", "Failed to search users", "error");
+    }
   };
 
-  const handleRemove = async (id) => {
-    // Add your remove logic here
-    await removeUser(id);
-
-    // Swal.fire("Success", "User removed successfully", "success")
-    console.log('Remove User:', formData);
-  };
+ 
 
   return (
     <Container maxWidth="lg" style={{ marginTop: '10px' }}>
-      <Typography variant="h5" gutterBottom>
+      {/* <Typography variant="h5" gutterBottom>
         Remove USER
-      </Typography>
+      </Typography> */}
 
       <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px', }}>
         <Box sx={{ padding: '20px', border: '1px solid black', borderRadius: '8px', width: "50%" }}>
@@ -43,10 +41,10 @@ const RemoveUser = () => {
           <Box>
             <InputField
               fullWidth
-              label="Full Name"
-              placeholder="Enter Full Name"
-              name="fullName"
-              value={formData.fullName}
+              label="Mobile Number"
+              placeholder="Enter Mobile Number"
+              name="mobileNumber"
+              value={formData.mobileNumber}
               onChange={handleChange}
               variant="outlined"
               margin="normal"
@@ -76,14 +74,36 @@ const RemoveUser = () => {
           Results
         </Typography>
         <Paper elevation={3} sx={{ padding: '20px', minHeight: '200px', borderRadius: '8px' }}>
-          {/* Results will be displayed here */}
+          {searchResults.length > 0 ? (
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Full Name</TableCell>
+                    <TableCell>Mobile Number</TableCell>
+                    <TableCell>EPIC ID</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                {searchResults.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.fullName}</TableCell>
+                      <TableCell>{user.mobileNumber}</TableCell>
+                      <TableCell>{user.epicId}</TableCell>
+                      <TableCell>{user.legislativeConstituency}</TableCell>
+                      <TableCell>{user.boothNameOrNumber}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Typography>No results found</Typography>
+          )}
         </Paper>
-      </Box>
-
-      <Box sx={{ textAlign: 'center', marginTop: '40px' }}>
-        <Button variant="contained" color="primary" size="large" onClick={handleRemove}>
-          Remove USER
-        </Button>
       </Box>
     </Container>
   );

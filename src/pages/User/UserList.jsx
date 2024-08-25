@@ -259,12 +259,12 @@ function TableCustomized() {
                       <>
                         <Box>
                           <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                            <Typography sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}>
+                            <Typography sx={{ padding: "0 5px", fontSize: "15px", cursor: "pointer", color: "#2F4CDD" }}>
                               View Details
                             </Typography>
                           </Box>
                           <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                            <Typography sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#FF0000" }}
+                            <Typography sx={{ padding: "0 5px", fontSize: "15px", cursor: "pointer", color: "#FF0000" }}
                               onClick={() => deleteUser(row.id)}
                             >
                               Remove
