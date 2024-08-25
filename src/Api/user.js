@@ -49,8 +49,8 @@ export const registerEpicUser = async (userData) => {
                 email: userData.email,
                 legislativeConstituency: userData.legislativeConstituency,
                 boothNameOrNumber: userData.boothNameOrNumber,
-                image: "jsa",
-                fcmToken: "jsndks",
+                image: "",
+                fcmToken: "",
                 timeZone: userData.timeZone,
                 status: "1"
 
