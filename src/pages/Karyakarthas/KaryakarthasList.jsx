@@ -16,7 +16,8 @@ import {
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { getUsers, removeUser } from '../../Api/user'; // Assuming you have the API functions in a file named api.js
+import { getUsers } from '../../Api/user'; // Assuming you have the API functions in a file named api.js
+import { deleteUserById } from '../../Api/karyakarthas'; // Correct import
 
 const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -24,7 +25,7 @@ const LightTooltip = styled(({ className, ...props }) => (
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "white",
     color: "rgba(0, 0, 0, 0.87)",
-    fontSize: 11,
+    fontSize: 13,
     minWidth: 110,
   },
 }));
@@ -38,7 +39,7 @@ function KaryakarthasList() {
       try {
         const response = await getUsers('', 1, rowsPerPage); // Removed the page variable
         console.log('API response:', response);
-        
+
         if (response.data && Array.isArray(response.data.users)) {
           setUsers(response.data.users);
         } else {
@@ -56,7 +57,7 @@ function KaryakarthasList() {
 
   const handleRemoveUser = async (userId) => {
     try {
-      await removeUser(userId);
+      await deleteUserById(userId); // Updated function call
       setUsers(users.filter(user => user.id !== userId));
     } catch (err) {
       console.error('Failed to remove user:', err);
@@ -144,8 +145,8 @@ function TableCustomized({ users, onRemoveUser }) {
           </TableHead>
           <tbody>
             {sortedUsers.map((user) => (
-              <TableRow key={user.epicNo}>
-                <TableCell>{user.epicNo}</TableCell>
+              <TableRow key={user.epicId}>
+                <TableCell>{user.epicId}</TableCell>
                 <TableCell>{user.fullName}</TableCell>
                 <TableCell>
                   <LightTooltip
@@ -162,7 +163,7 @@ function TableCustomized({ users, onRemoveUser }) {
                           <Typography
                             sx={{
                               padding: "0 5px",
-                              fontSize: "12px",
+                              fontSize: "15px",
                               cursor: "pointer",
                               color: "#2F4CDD",
                             }}
@@ -180,7 +181,7 @@ function TableCustomized({ users, onRemoveUser }) {
                           <Typography
                             sx={{
                               padding: "0 5px",
-                              fontSize: "12px",
+                              fontSize: "15px",
                               cursor: "pointer",
                               color: "#FF0000",
                             }}

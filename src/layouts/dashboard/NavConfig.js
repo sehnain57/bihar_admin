@@ -49,10 +49,10 @@ const navConfig = [
         title: 'Karyakartha List',
         path: '/dashboard/Karyakarthas/list',
       },
-      {
-        title: 'Remove Karyakartha',
-        path: '/dashboard/Karyakarthas/remove',
-      },
+      // {
+      //   title: 'Remove Karyakartha',
+      //   path: '/dashboard/Karyakarthas/remove',
+      // },
     ],
   },
   {

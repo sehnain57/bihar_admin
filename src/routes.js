@@ -17,7 +17,7 @@ import EventsList from './pages/Events/EventsList';
 import EventRequest from './pages/Events/EventRequest';
 import AddKaryakarthas from './pages/Karyakarthas/AddKaryakarthas';
 import KaryakarthasList from './pages/Karyakarthas/KaryakarthasList';
-import RemoveKaryakarthas from './pages/Karyakarthas/RemoveKaryakarthas';
+// import RemoveKaryakarthas from './pages/Karyakarthas/RemoveKaryakarthas';
 import PushNotifications from './pages/PushNotifications';
 import Analytics from './pages/Analytics';
 import VotersList from './pages/VotersList';
@@ -44,7 +44,7 @@ export default function Router() {
         { path: 'Events/requests', element: <EventRequest /> },
         { path: 'Karyakarthas/add', element: <AddKaryakarthas /> },
         { path: 'Karyakarthas/list', element: <KaryakarthasList /> },
-        { path: 'Karyakarthas/remove', element: <RemoveKaryakarthas /> },
+        // { path: 'Karyakarthas/remove', element: <RemoveKaryakarthas /> },
         { path: 'Push-notification', element: <PushNotifications /> },
         { path: 'Analytics', element: <Analytics /> },
         { path: 'Voters-list', element: <VotersList /> },

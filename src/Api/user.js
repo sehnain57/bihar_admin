@@ -140,3 +140,30 @@ export const removeUser = async (userId) => {
         throw err;
     }
 };
+
+// Add New Karyakartha
+
+
+export const searchUsers = async (mobileNumber,epicId, page = 1, limit = 10) => {
+
+    console.log("user------->",mobileNumber,epicId);
+    try {
+        const response = await axios.get(`${baseUrl}/api/user/v1/users/search`, {
+            params: {
+                mobileNumber,
+                epicId,
+                page,
+                limit,
+            },
+            headers: {
+                'accept': 'application/json',
+                Authorization: `Bearer ${getToken()}`
+            }
+        });
+        Swal.fire("Success", "User Search successfully", "success")
+        return response.data;
+    } catch (err) {
+        console.error('Failed to fetch users:', err.response ? err.response.data : err.message);
+        throw err;
+    }
+};

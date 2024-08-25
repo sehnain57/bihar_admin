@@ -1,31 +1,47 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, Typography, Paper, CircularProgress, TextField } from '@mui/material';
-// import { loginUser } from '../../Api/karyakarthas'; // Ensure this path is correct
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  Paper,
+  CircularProgress,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@mui/material';
+import { searchUsers } from '../../Api/user'; // Ensure this path is correct
 
 const AddKaryakartha = () => {
   const [loginData, setLoginData] = useState({
     phoneNum: '',
-    epicNumber: '',  // EPIC number should be stored separately
+    epicNumber: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [searchResults, setSearchResults] = useState([]); // State to store search results
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = async () => {
+  const handleSearch = async () => {
     setLoading(true);
     setError('');
     setSuccessMessage('');
+    setSearchResults([]);
 
     try {
-      // const data = await loginUser(loginData);
-      setSuccessMessage('User logged in successfully');
-      // Handle further actions here, such as redirecting the user or saving tokens
+      const data = await searchUsers(loginData.phoneNum, loginData.epicNumber);
+      setSearchResults(data.data); // Update to use the 'data' array from the API response
+      setSuccessMessage('User search completed successfully');
     } catch (error) {
-      setError('Failed to log in. Please try again.');
+      setError('Failed to search users. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -82,7 +98,7 @@ const AddKaryakartha = () => {
               variant="contained"
               sx={{ backgroundColor: "#007AFF", width: '100%' }}
               size="large"
-              onClick={handleLogin}
+              onClick={handleSearch}
               disabled={loading}
             >
               {loading ? <CircularProgress size={24} color="inherit" /> : 'Search'}
@@ -95,21 +111,39 @@ const AddKaryakartha = () => {
         <Typography variant="h6" gutterBottom>
           Results
         </Typography>
-        <Paper elevation={3} sx={{ padding: '20px', minHeight: '200px', borderRadius: '8px' }}>
-          <Typography>No results to display</Typography>
-          {/* Here you can map through and display results */}
+        <Paper elevation={3} sx={{ padding: '20px', borderRadius: '8px' }}>
+          {searchResults.length === 0 ? (
+            <Typography>No results to display</Typography>
+          ) : (
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="user search results">
+                <TableHead>
+                  <TableRow>
+                    <TableCell><strong>Name</strong></TableCell>
+                    <TableCell><strong>Phone</strong></TableCell>
+                    <TableCell><strong>EPIC Number</strong></TableCell>
+                    <TableCell><strong>Constituency</strong></TableCell>
+                    <TableCell><strong>Booth</strong></TableCell>
+                    <TableCell><strong>Email</strong></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {searchResults.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.fullName}</TableCell>
+                      <TableCell>{user.mobileNumber}</TableCell>
+                      <TableCell>{user.epicId}</TableCell>
+                      <TableCell>{user.legislativeConstituency}</TableCell>
+                      <TableCell>{user.boothNameOrNumber}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </Paper>
       </Box>
-
-      {/* <Box sx={{ textAlign: 'center', marginTop: '40px' }}>
-        <Button
-          variant="contained"
-          sx={{ backgroundColor: "#007AFF", padding: '10px 30px', fontSize: '16px' }}
-          size="large"
-        >
-          Add as Karyakartha
-        </Button>
-      </Box> */}
     </Container>
   );
 };

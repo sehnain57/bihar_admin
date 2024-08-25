@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, Typography, Grid} from '@mui/material';
-// import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { Box, Button, Container, Typography, Grid } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import InputField from '../components/InputField'; // Update the path according to your project structure
+import { addNotification } from '../Api/notification'; // Import addNotification
 
 const AddEvent = () => {
+  // Retrieve the user's current timezone
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     time: '',
     date: null,
+    timezone: userTimezone, // Add timezone to formData
   });
 
   const handleChange = (e) => {
@@ -22,9 +26,32 @@ const AddEvent = () => {
     setFormData({ ...formData, date: newDate });
   };
 
-  const handleSend = () => {
-    // Add your send logic here
-    console.log('Event Data:', formData);
+  const handleSend = async () => {
+    try {
+      // Convert date to ISO format if it is not null
+      const formattedDate = formData.date ? formData.date.toISOString() : null;
+
+      // Prepare data to send
+      const dataToSend = {
+        ...formData,
+        date: formattedDate,
+      };
+
+      // Call addNotification with the formatted data
+      await addNotification(dataToSend);
+
+      // Optionally reset the form or redirect the user
+      setFormData({
+        title: '',
+        description: '',
+        time: '',
+        date: null,
+        timezone: userTimezone, // Reset timezone to default value
+      });
+    } catch (error) {
+      // Handle errors if needed
+      console.error('Failed to add notification:', error);
+    }
   };
 
   return (
@@ -46,7 +73,6 @@ const AddEvent = () => {
               variant="outlined"
               margin="normal"
               sx={{ mb: 4 }}
-
             />
             <Typography variant="subtitle1">Description</Typography>
             <InputField
@@ -61,7 +87,6 @@ const AddEvent = () => {
               multiline
               rows={4}
               sx={{ mb: 4 }}
-
             />
             <InputField
               fullWidth
@@ -74,16 +99,7 @@ const AddEvent = () => {
               variant="outlined"
               margin="normal"
               sx={{ mb: 4 }}
-
             />
-            {/* <Box sx={{ marginTop: '16px', textAlign: 'center' }}>
-              <IconButton color="primary">
-                <AttachFileIcon />
-              </IconButton>
-              <Typography variant="caption" display="block">
-                Add Document (if any)
-              </Typography>
-            </Box> */}
           </Grid>
 
           <Grid item xs={12} md={6}>
