@@ -131,7 +131,25 @@ export const getUsers = async (query, page = 1, limit = 10) => {
         throw err;
     }
 };
-
+export const getEpicUsers = async (query, page = 1, limit = 10) => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/epicUser/v1/users`, {
+            params: {
+                page,
+                limit,
+                query
+            },
+            headers: {
+                'accept': 'application/json',
+            }
+        });
+        return response.data;
+    } catch (err) {
+        // Swal.fire("No", "No user Founds", "Found");
+        console.error('Failed to fetch users:', err.response ? err.response.data : err.message);
+        throw err;
+    }
+};
 export const removeUser = async (userId) => {
     try {
         const response = await axios.delete(`${baseUrl}/api/user/v1/users/${userId}`, {
@@ -152,7 +170,7 @@ export const searchEpicUsers = async (mobileNumber,epicId, page = 1, limit = 10)
 
     console.log("user------->",mobileNumber,epicId);
     try {
-        const response = await axios.get(`${baseUrl}/api/user/v1/epicUser/search`, {
+        const response = await axios.get(`${baseUrl}/api/epicUser/v1/users/search`, {
             params: {
                 mobileNumber,
                 epicId,
@@ -160,8 +178,7 @@ export const searchEpicUsers = async (mobileNumber,epicId, page = 1, limit = 10)
                 limit,
             },
             headers: {
-                'accept': 'application/json',
-                Authorization: `Bearer ${getToken()}`
+                'accept': 'application/json'
             }
         });
         Swal.fire("Success", "User Search successfully", "success")

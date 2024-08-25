@@ -20,7 +20,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { getUsers, removeUser } from '../../Api/user';
+import { getEpicUsers, removeUser } from '../../Api/user';
 
 function CustomTablePagination({ count, page, onPageChange }) {
   return (
@@ -142,7 +142,7 @@ function TableCustomized() {
   const [rows, setRows] = useState([]);
 
   const getData = async () => {
-    await getUsers().then((res) => {
+    await getEpicUsers().then((res) => {
       console.log(res.data.users);
       setRows(res.data.users);
     });

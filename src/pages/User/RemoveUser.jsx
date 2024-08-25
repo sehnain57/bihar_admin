@@ -83,12 +83,15 @@ const RemoveUser = () => {
                     <TableCell>Full Name</TableCell>
                     <TableCell>Mobile Number</TableCell>
                     <TableCell>EPIC ID</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell>Constituency</TableCell>
+                    <TableCell>Booth</TableCell>
+                    <TableCell>Email</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                 {searchResults.map((user) => (
                     <TableRow key={user.id}>
+                        <TableCell>{user.id}</TableCell>
                       <TableCell>{user.fullName}</TableCell>
                       <TableCell>{user.mobileNumber}</TableCell>
                       <TableCell>{user.epicId}</TableCell>
