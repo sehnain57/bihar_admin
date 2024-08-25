@@ -58,8 +58,8 @@ export const registerEpicUser = async (userData) => {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    Authorization: `Bearer ${getToken()}`
+                    'Accept': 'application/json'
+                   
                 }
             }
         );
