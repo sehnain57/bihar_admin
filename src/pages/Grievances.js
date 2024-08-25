@@ -134,6 +134,7 @@ const Grievances = () => {
                         size="small"
                         placeholder="Search Karyakartha"
                         fullWidth
+                        style={{ width: '300px' }}
                       />
                     )}
                   />
