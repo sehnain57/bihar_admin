@@ -35,7 +35,7 @@ const LightTooltip = styled(({ className, ...props }) => (
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "white",
     color: "rgba(0, 0, 0, 0.87)",
-    fontSize: 11,
+    fontSize: 13,
     minWidth: 110,
   },
 }));
@@ -269,7 +269,7 @@ const handleCloseDetails = () => {
                         <Box>
                           <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
                           <Typography
-                              sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}
+                              sx={{ padding: "0 5px", fontSize: "15px", cursor: "pointer", color: "#2F4CDD" }}
                               onClick={() => handleOpenDetails(row)}
                             >
                               View Details
@@ -277,7 +277,7 @@ const handleCloseDetails = () => {
                           </Box>
                           <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
                             <Typography
-                              sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#FF0000" }}
+                              sx={{ padding: "0 5px", fontSize: "15px", cursor: "pointer", color: "#FF0000" }}
                               onClick={() => removeEvent(row.id)}
                             >
                               Remove

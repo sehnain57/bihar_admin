@@ -41,7 +41,7 @@ export const createGrievance = async (data) => {
 
 export const GrievancesGet = async (page = 1, limit = 10) => {
     try {
-        const response = await axios.get(`${baseUrl}/api/grievances/v1/admin/grievances`, {
+        const response = await axios.get(`${baseUrl}/api/grievances/v1/grievances`, {
             params: {
                 page,
                 limit,
@@ -141,3 +141,34 @@ export const assignGrievanceUser = async (id, mobilenumber) => {
         throw err; // Re-throw the error if you want to handle it elsewhere
     }
 };
+export const updateStatus = async (id, statuss) => {
+    if (!id || statuss === undefined) {
+        throw new Error('Invalid input: id and status are required');
+    }
+
+    try {
+        // console.log("id check------------>", id, "statuss----->", statuss);
+        
+        // Ensure status is a number
+
+
+        const response = await axios.put(
+            `${baseUrl}/api/grievances/v1/update-status/${id}`,
+            { status: statuss },
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                     Authorization: `Bearer ${getToken()}`
+                }
+            }
+        );
+        Swal.fire("Success", "Status updated successfully", "success")
+        console.log('Status updated successfully', response.data);
+        return response.data;
+    } catch (err) {
+        console.error('Error updating status:', err.response ? err.response.data : err.message);
+        throw err; // Re-throw the error if you want to handle it elsewhere
+    }
+};
+

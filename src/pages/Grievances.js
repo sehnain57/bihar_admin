@@ -17,7 +17,7 @@ import {
   MenuItem,
 } from '@mui/material';
 
-import { GrievancesGet, assignGrievanceUser } from '../Api/grievance';
+import { GrievancesGet, assignGrievanceUser, updateStatus } from '../Api/grievance';
 import { getUsers } from '../Api/user';
 
 const Grievances = () => {
@@ -42,7 +42,7 @@ const Grievances = () => {
     };
 
     fetchData();
-  }, []); // Empty dependency array means this effect runs only once
+  }, []);
 
   const handleKaryakarthaChange = async (id, selectedUser) => {
     if (selectedUser) {
@@ -61,14 +61,20 @@ const Grievances = () => {
     }
   };
 
-  const handleStatusChange = (id, value) => {
+  const handleStatusChange = async (id, value) => {
     setData(prevData =>
       prevData.map(item =>
         item.id === id ? { ...item, status: value } : item
       )
     );
-    // Optionally, update the backend here
-    console.log(`Status for ID ${id} changed to ${value}`);
+
+    try {
+      await updateStatus(id, value);
+      console.log(`Status for ID ${id} updated to ${value}`);
+    } catch (err) {
+      console.error('Error updating status:', err);
+      // Optionally, you could revert the status change if the API call fails
+    }
   };
 
   return (
@@ -143,7 +149,7 @@ const Grievances = () => {
                       Select Status
                     </MenuItem>
                     <MenuItem value="0">Accepted</MenuItem>
-                    <MenuItem value="1">Processing</MenuItem>
+                    <MenuItem value="1">Pending</MenuItem>
                     <MenuItem value="2">Completed</MenuItem>
                     <MenuItem value="3">Rejected</MenuItem>
                   </Select>

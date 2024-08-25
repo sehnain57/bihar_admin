@@ -28,10 +28,11 @@ import { getBooths, deleteBooth } from '../../Api/booth'; // Adjust the import p
 const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(() => ({
+ 
   [`& .${tooltipClasses.tooltip}`]: {
-    // backgroundColor: "white",
+    backgroundColor: "white",
     color: "rgba(0, 0, 0, 0.87)",
-    fontSize: 11,
+    fontSize: 13,
     minWidth: 110,
   },
 }));
@@ -201,20 +202,20 @@ function TableCustomized() {
               {rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.constituency.name}</TableCell> {/* New cell for constituency name */}
+                  <TableCell>{row.constituency?.name || ''}</TableCell>
                   <TableCell>
                     <LightTooltip
                       placement='bottom-end'
                       title={
                         <Box>
                           <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                            <Typography sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#2F4CDD" }}>
+                            <Typography sx={{ padding: "0 5px", fontSize: "15px", cursor: "pointer", color: "#2F4CDD" }}>
                               View Details
                             </Typography>
                           </Box>
                           <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
                             <Typography
-                              sx={{ padding: "0 5px", fontSize: "12px", cursor: "pointer", color: "#FF0000" }}
+                              sx={{ padding: "0 5px", fontSize: "15px", cursor: "pointer", color: "#FF0000" }}
                               onClick={() => removeBooth(row.id)}
                             >
                               Remove

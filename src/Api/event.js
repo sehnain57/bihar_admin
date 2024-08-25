@@ -65,7 +65,7 @@ export const updateStatus = async (id, statuss) => {
                 }
             }
         );
-
+        Swal.fire("Success", "Status updated successfully", "success")
         console.log('Status updated successfully', response.data);
         return response.data;
     } catch (err) {

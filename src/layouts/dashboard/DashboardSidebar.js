@@ -7,7 +7,8 @@ import { Box, Drawer } from '@mui/material';
 
 import useResponsive from '../../hooks/useResponsive';
 // components
-import Logo from '../../assest/logo.png';
+import Logo from '../../assest/logpnav.jpeg';
+// import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 //
