@@ -215,3 +215,18 @@ export const searchUsers = async (mobileNumber,epicId, page = 1, limit = 10) => 
         throw err;
     }
 };
+export const removeEpicUser = async (userId) => {
+    try {
+        const response = await axios.delete(`${baseUrl}/api/epicUser/v1/users/${userId}`, {
+            headers: {
+                'accept': 'application/json',
+               Authorization: `Bearer ${getToken()}`
+            }
+        });
+        Swal.fire("Success", "User removed successfully", "success")
+        return response.data;
+    } catch (err) {
+        console.error('Failed to remove user:', err.response ? err.response.data : err.message);
+        throw err;
+    }
+};

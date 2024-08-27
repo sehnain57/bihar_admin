@@ -20,7 +20,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { getEpicUsers, removeUser } from '../../Api/user';
+import { getEpicUsers, removeEpicUser } from '../../Api/user';
 
 function CustomTablePagination({ count, page, onPageChange }) {
   return (
@@ -171,7 +171,7 @@ function TableCustomized() {
   };
 
   const deleteUser = async (id) => {
-    await removeUser(id);
+    await removeEpicUser(id);
     await getData();
   };
 
