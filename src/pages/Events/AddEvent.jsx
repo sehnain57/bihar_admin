@@ -15,7 +15,7 @@ const AddEvent = () => {
     toTime: '',
     constituency: '',
     boothNumber: '',
-    status: 1,
+    status: 0,
     documents: null, // Assuming document is a file
   });
 

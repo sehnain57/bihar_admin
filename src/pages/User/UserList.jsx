@@ -14,6 +14,10 @@ import {
   TableCell,
   TableHead,
   Table,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
@@ -46,7 +50,7 @@ const LightTooltip = styled(({ className, ...props }) => (
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "white",
     color: "rgba(0, 0, 0, 0.87)",
-    fontSize: 11,
+    fontSize: 14,
     minWidth: 110,
   },
 }));
@@ -140,7 +144,8 @@ function TableCustomized() {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('epicNo');
   const [rows, setRows] = useState([]);
-
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
   const getData = async () => {
     await getEpicUsers().then((res) => {
       console.log(res.data.users);
@@ -175,6 +180,15 @@ function TableCustomized() {
     await getData();
   };
 
+  const handleViewDetails = (user) => {
+    setSelectedUser(user);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedUser(null);
+  };
   return (
     <Box>
       <Root>
@@ -258,13 +272,13 @@ function TableCustomized() {
                     title={
                       <>
                         <Box>
-                          <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                            <Typography sx={{ padding: "0 5px", fontSize: "15px", cursor: "pointer", color: "#2F4CDD" }}>
+                          <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}    onClick={() => handleViewDetails(row)}>
+                            <Typography sx={{ padding: "0 5px", fontSize: "16px", cursor: "pointer", color: "#2F4CDD" }}>
                               View Details
                             </Typography>
                           </Box>
                           <Box sx={{ padding: "4px 5px", display: "flex", alignItems: "center", cursor: "pointer" }}>
-                            <Typography sx={{ padding: "0 5px", fontSize: "15px", cursor: "pointer", color: "#FF0000" }}
+                            <Typography sx={{ padding: "0 5px", fontSize: "16px", cursor: "pointer", color: "#FF0000" }}
                               onClick={() => deleteUser(row.id)}
                             >
                               Remove
@@ -307,6 +321,26 @@ function TableCustomized() {
           </tfoot>
         </Table>
       </Root>
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle>User Details</DialogTitle>
+        <DialogContent>
+          {selectedUser && (
+            <Box>
+              <Typography variant="h6">Full Name: {selectedUser.fullName}</Typography>
+              <Typography variant="body1">EPIC ID: {selectedUser.epicId}</Typography>
+              <Typography variant="body1">Mobile Number: {selectedUser.mobileNumber}</Typography>
+              <Typography variant="body1">Legislative Constituency: {selectedUser.legislativeConstituency}</Typography>
+              <Typography variant="body1">Booth Name/Number: {selectedUser.boothNameOrNumber}</Typography>
+              {/* Add more fields as needed */}
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
