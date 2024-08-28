@@ -7,6 +7,7 @@ import { getAllConstituencies } from '../../Api/constituencies';
 function AddBooth() {
   const [formData, setFormData] = useState({
     name: '',
+    hindiName: '', // New field for Hindi name
     constituencyId: '',
   });
 
@@ -37,12 +38,13 @@ function AddBooth() {
     try {
       const payload = {
         name: formData.name,
+        hindiName: formData.hindiName, // Include Hindi name in the payload
         constituencyId: formData.constituencyId,
       };
 
       await createBooth(payload);
       Swal.fire("Success", "Booth added successfully", "success");
-      setFormData({ name: '', constituencyId: '' }); // Clear the form fields after submission
+      setFormData({ name: '', hindiName: '', constituencyId: '' }); // Clear the form fields after submission
     } catch (err) {
       console.error('Error adding booth:', err);
       Swal.fire("Error", "Failed to add booth", "error");
@@ -50,15 +52,26 @@ function AddBooth() {
   };
 
   return (
-    <Box sx={{ maxWidth: '600px', margin: '0 auto', p: 2,backgroundColor:'white', borderRadius:2, boxShadow:10 }}>
+    <Box sx={{ maxWidth: '600px', margin: '0 auto', p: 2, backgroundColor: 'white', borderRadius: 2, boxShadow: 10 }}>
       <Typography variant="h5" gutterBottom>
         Add Booth
       </Typography>
-      <Box component="form" noValidate autoComplete="off" >
+      <Box component="form" noValidate autoComplete="off">
         <TextField
           label="Booth Name"
           name="name"
           value={formData.name}
+          onChange={handleChange}
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          sx={{ paddingBottom: '14px' }}
+        />
+        
+        <TextField
+          label="Hindi Name"
+          name="hindiName"
+          value={formData.hindiName}
           onChange={handleChange}
           variant="outlined"
           fullWidth

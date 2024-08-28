@@ -8,6 +8,8 @@ import InputField from '../../components/InputField'; // Update the path accordi
 const AddConstituencies = () => {
   const [formData, setFormData] = useState({
     name: '',
+    hindiName:'',
+    booths: []
   });
 
   const handleChange = (e) => {
@@ -16,14 +18,15 @@ const AddConstituencies = () => {
 
   const handleCreate = async () => {
     try {
-      await createConstituencies(formData.name);
+      await createConstituencies(formData); // Pass the entire formData object to the API
       Swal.fire("Success", "Constituency added successfully", "success");
-      setFormData({ name: '' }); // Clear the input field after creation
+      setFormData({ name: '', hindiName: '' }); // Clear the input fields after creation
     } catch (err) {
       console.error('Error creating constituency:', err);
       Swal.fire("Error", "Failed to add constituency", "error");
     }
   };
+
 
   return (
     <Container maxWidth="lg" style={{ marginTop: '10px' }}>
@@ -43,6 +46,16 @@ const AddConstituencies = () => {
               placeholder="Enter Constituency Name"
               name="name"
               value={formData.name}
+              onChange={handleChange}
+              variant="outlined"
+              margin="normal"
+            />
+             <InputField
+              fullWidth
+              label="Constituency Hindi Name"
+              placeholder="Enter Constituency Hindi Name"
+              name="hindiName"
+              value={formData.hindiName}
               onChange={handleChange}
               variant="outlined"
               margin="normal"

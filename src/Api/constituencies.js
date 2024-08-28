@@ -3,18 +3,20 @@ import Swal from 'sweetalert2';
 
 import { baseUrl , getToken } from './config';
 
-export const createConstituencies = async (name) => {
+export const createConstituencies = async (formData) => {
     try {
-        const response = await axios.post(`${baseUrl}/api/constituencies/v1/constituencies`,
-            { name },
+        const response = await axios.post(
+            `${baseUrl}/api/constituencies/v1/constituencies`,
+            formData, // Pass the entire formData object
             {
                 headers: {
                     'accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
             }
         );
-        Swal.fire("Success", "Constituency Added", "success")
+        Swal.fire("Success", "Constituency Added", "success");
         return response.data;
     } catch (err) {
         console.error('Failed to create constituency:', err.response ? err.response.data : err.message);
