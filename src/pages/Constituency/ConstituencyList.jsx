@@ -185,6 +185,9 @@ function TableCustomized() {
                   </Tooltip>
                 </TableCell>
                 <TableCell sx={{ color: 'white' }}>
+                  <Typography variant="h6">Hindi name</Typography>
+                </TableCell>
+                <TableCell sx={{ color: 'white' }}>
                   <Typography variant="h6">Action</Typography>
                 </TableCell>
               </TableRow>
@@ -193,6 +196,7 @@ function TableCustomized() {
               {rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell sx={{ color: 'white' }}>{row.name}</TableCell>
+                  <TableCell sx={{ color: 'white' }}>{row.hindiName}</TableCell>
                   <TableCell>
                     <LightTooltip
                       placement='bottom-end'

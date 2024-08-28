@@ -195,6 +195,7 @@ function TableCustomized() {
                     </TableSortLabel>
                   </Tooltip>
                 </TableCell>
+                <TableCell>Hindi name</TableCell> 
                 <TableCell>Action</TableCell> {/* New heading for Action column */}
               </TableRow>
             </TableHead>
@@ -203,6 +204,7 @@ function TableCustomized() {
                 <TableRow key={row.id}>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.constituency?.name || ''}</TableCell>
+                  <TableCell>{row.hindiName}</TableCell>
                   <TableCell>
                     <LightTooltip
                       placement='bottom-end'
