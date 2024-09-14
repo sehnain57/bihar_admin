@@ -18,6 +18,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  TextField
 } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
@@ -59,6 +60,7 @@ function UserList() {
   return (
     <div>
       <Box sx={{ p: 2 }}>
+
         <Typography sx={{ fontWeight: "bold", fontSize: "20px", textDecoration: "underline" }}>
           Users List
         </Typography>
@@ -146,6 +148,8 @@ function TableCustomized() {
   const [rows, setRows] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const getData = async () => {
     await getEpicUsers().then((res) => {
       console.log(res.data.users);
@@ -169,6 +173,13 @@ function TableCustomized() {
     }
     return a[orderBy] > b[orderBy] ? -1 : 1;
   });
+  const filteredRows = sortedRows.filter(row => {
+    const fullName = row.fullName ? row.fullName.toLowerCase() : "";
+    const mobileNumber = row.mobileNumber ? row.mobileNumber.toLowerCase() : "";
+  
+    const search = searchTerm.toLowerCase();
+    return fullName.includes(search) || mobileNumber.includes(search);
+  });
 
   const handleChangePage = (event, newPage) => {
     console.log("handle page", newPage);
@@ -181,6 +192,7 @@ function TableCustomized() {
   };
 
   const handleViewDetails = (user) => {
+    console.log("user------->",user)
     setSelectedUser(user);
     setOpenDialog(true);
   };
@@ -191,6 +203,16 @@ function TableCustomized() {
   };
   return (
     <Box>
+         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <TextField
+          label="Search User"
+          variant="outlined"
+          size="small"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ mb: 2 }}
+        />
+      </Box>
       <Root>
         <Table aria-label="custom pagination table" sx={{ backgroundColor: "white" }}>
           <TableHead>
@@ -259,7 +281,7 @@ function TableCustomized() {
             </TableRow>
           </TableHead>
           <tbody>
-            {sortedRows.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((row) => (
+            {filteredRows.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((row) => (
               <TableRow key={row.id}>
                 <TableCell>{row.epicId}</TableCell>
                 <TableCell>{row.fullName}</TableCell>
@@ -321,26 +343,55 @@ function TableCustomized() {
           </tfoot>
         </Table>
       </Root>
-      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>User Details</DialogTitle>
-        <DialogContent>
-          {selectedUser && (
-            <Box>
-              <Typography variant="h6">Full Name: {selectedUser.fullName}</Typography>
-              <Typography variant="body1">EPIC ID: {selectedUser.epicId}</Typography>
-              <Typography variant="body1">Mobile Number: {selectedUser.mobileNumber}</Typography>
-              <Typography variant="body1">Legislative Constituency: {selectedUser.legislativeConstituency}</Typography>
-              <Typography variant="body1">Booth Name/Number: {selectedUser.boothNameOrNumber}</Typography>
-              {/* Add more fields as needed */}
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+    <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+  <DialogTitle>User Details</DialogTitle>
+  <DialogContent>
+    {selectedUser && (
+      <Box>
+        <Typography variant="h6">
+          <span style={{ fontWeight: "bold" }}>Full Name: </span>
+          {selectedUser.fullName ? selectedUser.fullName : "Not Available"}
+        </Typography>
+        <Typography variant="body1">
+          <span style={{ fontWeight: "bold" }}>Father's Name: </span>
+          {selectedUser.fatherName ? selectedUser.fatherName : "Not Available"}
+        </Typography>
+        <Typography variant="body1">
+          <span style={{ fontWeight: "bold" }}>EPIC ID: </span>
+          {selectedUser.epicId ? selectedUser.epicId : "Not Available"}
+        </Typography>
+        <Typography variant="body1">
+          <span style={{ fontWeight: "bold" }}>Mobile Number: </span>
+          {selectedUser.mobileNumber ? selectedUser.mobileNumber : "Not Available"}
+        </Typography>
+        <Typography variant="body1">
+          <span style={{ fontWeight: "bold" }}>FCM Token: </span>
+          {selectedUser.fcmToken ? selectedUser.fcmToken : "Not Available"}
+        </Typography>
+        <Typography variant="body1">
+          <span style={{ fontWeight: "bold" }}>Legislative Constituency: </span>
+          {selectedUser.legislativeConstituency ? selectedUser.legislativeConstituency : "Not Available"}
+        </Typography>
+        <Typography variant="body1">
+          <span style={{ fontWeight: "bold" }}>Booth Name/Number: </span>
+          {selectedUser.boothNameOrNumber ? selectedUser.boothNameOrNumber : "Not Available"}
+        </Typography>
+        <Typography variant="body1">
+          <span style={{ fontWeight: "bold" }}>Gender: </span>
+          {selectedUser.gender ? selectedUser.gender : "Not Available"}
+        </Typography>
+        {/* Add more fields as needed */}
+      </Box>
+    )}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseDialog} color="primary">
+      Close
+    </Button>
+  </DialogActions>
+</Dialog>
+
+
     </Box>
   );
 }
