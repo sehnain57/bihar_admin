@@ -43,6 +43,7 @@ export const registerEpicUser = async (userData) => {
                 fullName: userData.fullName,
                 fatherName: userData.fatherName,
                 epicId: userData.epicId,
+                voterId:userData.epicId,
                 mobileNumber: userData.mobileNumber,
                 gender: userData.gender,
                 age: userData.age,
