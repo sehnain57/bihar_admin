@@ -12,6 +12,7 @@ const AddUser = () => {
     gender: '',
     age: 0,
     epicId: '',
+    voterId:'',
     legislativeConstituency: '',
     boothNameOrNumber: '',
     mobileNumber: '',
