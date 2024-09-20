@@ -57,6 +57,7 @@ export const registerEpicUser = async (userData) => {
                 status: "1"
 
             },
+
             {
                 headers: {
                     'Content-Type': 'application/json',
