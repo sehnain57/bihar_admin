@@ -1,0 +1,16 @@
+users-> admin side -> get ,put,delete
+same for epic user
+
+gievances -> v1/grievances -> get , v2/grievances -> update, v1/-- to delete , /admin/grievance to post
+
+events -> /adminEvent to add (done), v1/events to get,put,delete (with multiple events)
+
+constitunencies -> 1,2,4,5 for crud
+
+
+questions to ask
+1. add user k page pr konsi api lgygi?
+2. update user ki api kahan lgy gi ?? qk abhi option nhi hai uska
+3. update,delete grievance ki api kahan lgy gi
+4. add events mein constituency, mobileNumber, boothNumber kahan se aiga??
+5. constituency ki screens nhi hain
